@@ -17,7 +17,9 @@ const LatestCollection = () => {
       <div className="text-center py-8 text-3xl">
         <Title text1={"LATEST"} text2={"COLLECTIONS"} />
         <p className="w-3/4 m-auto text-xs sm:text-sm md:text-base text-gray-600">
-          of the rinting the typindting details
+          Sportswear has also become popular as casual fashion, known as
+          athleisure. This trend involves wearing sportswear in everyday
+          settings, blending comfort with style
         </p>
       </div>
 
