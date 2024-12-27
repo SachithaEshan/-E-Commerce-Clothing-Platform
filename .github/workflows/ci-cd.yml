@@ -26,14 +26,14 @@ jobs:
 
       # Install dependencies and run tests for the client application
       - name: Install and Test Client
-        working-directory: ./client
+        working-directory: ./frontend
         run: |
           npm install
           npm run test
 
       # Install dependencies, export environment variables to be used by application and run tests for the server application
       - name: Install and Test Server
-        working-directory: ./server
+        working-directory: ./backend
         run: |
           npm install
           export MONGODB_URI=$MONGODB_URI
@@ -44,7 +44,7 @@ jobs:
 
       # Build a Docker image for the client application
       - name: Build Client Docker Image
-        working-directory: ./client
+        working-directory: ./frontend
         # Build image with tag rakeshpotnuru/productivity-app:client
         run: |
           docker build -t rakeshpotnuru/productivity-app:client-${{github.run_number}} .
@@ -52,7 +52,7 @@ jobs:
       # Build a Docker image for the server application
       - name: Build Server Docker Image
         working-directory:
-          ./server
+          ./backend
           # Build image with tag rakeshpotnuru/productivity-app:server
         run: |
           docker build -t rakeshpotnuru/productivity-app:server-${{github.run_number}} .
