@@ -24,6 +24,12 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
+      # Set up Node.js
+      - name: Set up Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
       # Install dependencies and run tests for the client application
       - name: Install and Test Client
         working-directory: ./frontend
@@ -51,9 +57,8 @@ jobs:
 
       # Build a Docker image for the server application
       - name: Build Server Docker Image
-        working-directory:
-          ./backend
-          # Build image with tag rakeshpotnuru/productivity-app:server
+        working-directory: ./backend
+        # Build image with tag rakeshpotnuru/productivity-app:server
         run: |
           docker build -t rakeshpotnuru/productivity-app:server-${{github.run_number}} .
 
