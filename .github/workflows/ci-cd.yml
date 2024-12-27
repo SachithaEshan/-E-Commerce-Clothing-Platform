@@ -15,30 +15,31 @@ jobs:
       - name: Checkout code
         uses: actions/checkout@v2
 
-      - name: Debug file structure
-        run: |
-          echo "Debugging file structure:"
-          ls -R /home/runner/work/coursework-group_09/
-
       - name: Set up Node.js
         uses: actions/setup-node@v3
         with:
           node-version: "20"
 
-      - name: Install dependencies
-        working-directory: /home/runner/work/coursework-group_09
-        run: npm install
+      - name: Install backend dependencies
+        run: |
+          cd backend
+          npm install
+
+      - name: Install frontend dependencies
+        run: |
+          cd frontend
+          npm install
 
       - name: Run tests
-        working-directory: /home/runner/work/coursework-group_09
         run: npm test
 
       - name: Build frontend
-        working-directory: /home/runner/work/coursework-group_09/frontend
-        run: npm run build
+        run: |
+          cd frontend
+          npm run build
 
       - name: Upload build artifacts
         uses: actions/upload-artifact@v3
         with:
           name: build
-          path: /home/runner/work/coursework-group_09/frontend/build
+          path: ./frontend/build
