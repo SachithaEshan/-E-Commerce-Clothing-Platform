@@ -1,7 +1,7 @@
 import React from "react";
 import Title from "../components/Title";
 import aboutUsImage from "../assets/about-us.jpg";
-import NewsletterBox from "../components/NewsletterBox"; // Adjust the path as needed
+import NewsLetterBox from "../components/NewsLetterBox"; 
 
 
 
@@ -45,7 +45,7 @@ Whether you're training for your next big competition or simply embracing an act
 
           </div>
         </div>
-        <NewsletterBox/>
+        <NewsLetterBox/>
     </div>
   )
 };

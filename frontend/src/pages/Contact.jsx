@@ -1,7 +1,7 @@
 import React from "react";
 import Title from "../components/Title";
 import contactUsImage from "../assets/cu2.jpg";
-import NewsletterBox from "../components/NewsletterBox"; // Adjust the path as needed
+import NewsLetterBox from "../components/NewsLetterBox"; // Adjust the path as needed
 
 const Contact = () => {
   return (
@@ -20,7 +20,7 @@ const Contact = () => {
         <button className='border border-black px-8 py-4 text-sm hover:bg-black hover:text-white trasition-all duration-500'>Explore More</button>
        </div>
       </div>
-      <NewsletterBox/>
+      <NewsLetterBox/>
     </div>
   )
 };
