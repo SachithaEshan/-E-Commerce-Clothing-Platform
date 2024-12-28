@@ -23,6 +23,7 @@ import hero_img from "./8278216_3852578.jpg";
 import exchange_icon from "./exchange-line.png";
 import quality_icon from "./verified-badge-line.png";
 import customer_icon from "./customer-service-line.png";
+import cross_icon from "./cross_icon.png";
 
 export const assets = {
   logo,
@@ -35,6 +36,7 @@ export const assets = {
   exchange_icon,
   quality_icon,
   customer_icon,
+  cross_icon,
 };
 
 export const products = [
