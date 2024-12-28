@@ -3,11 +3,9 @@ import { assets } from "../assets/assets";
 import { Link, NavLink } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 
-
-
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
-  const {setShowSearch} = useContext(ShopContext);
+  const { setShowSearch } = useContext(ShopContext);
   const { getCartCount } = useContext(ShopContext);
 
   return (
@@ -35,15 +33,22 @@ const Navbar = () => {
         </NavLink>
       </ul>
       <div className="flex items-center gap-6">
-
-        <img onClick={()=>setShowSearch(true)} src={assets.search_icon} className="w-5 cursor-pointer" alt="" />
+        <img
+          onClick={() => setShowSearch(true)}
+          src={assets.search_icon}
+          className="w-5 cursor-pointer"
+          alt=""
+        />
         <div className="group relative">
-
-          <img className="w-5 cursor-pointer" src={assets.profile_icon} />
+          <Link to="/login">
+            <img className="w-5 cursor-pointer" src={assets.profile_icon} />
+          </Link>
           <div className="absolute right-0 hidden pt-4 group-hover:block dropdown-menu">
             <div className="flex flex-col gap-2 px-5 py-3 text-gray-500 rounded w-36 bg-slate-100">
               <p className="cursor-pointer hover:text-black">My Profile</p>
-              <p className="cursor-pointer hover:text-black">Orders</p>
+              <Link to="/orders" className="relative">
+                <p className="cursor-pointer hover:text-black">Orders</p>
+              </Link>
               <p className="cursor-pointer hover:text-black">Logout</p>
             </div>
           </div>
