@@ -2,14 +2,14 @@ import React, { useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import { Link } from "react-router-dom";
 
-const ProductItems = ({ id, image, name, price }) => {
+const ProductItem = ({ id, image, name, price }) => {
   const { currency } = useState(ShopContext);
 
   return (
     <Link className="text-gray-700 cursor-pointer" to={`/product/${id}`}>
       <div className="overflow-hidden">
         <img
-          className="hover:scale-110 transition ease-in-out"
+          className="transition ease-in-out hover:scale-110"
           src={image[0]}
           alt=""
         />
@@ -22,4 +22,4 @@ const ProductItems = ({ id, image, name, price }) => {
   );
 };
 
-export default ProductItems;
+export default ProductItem;
