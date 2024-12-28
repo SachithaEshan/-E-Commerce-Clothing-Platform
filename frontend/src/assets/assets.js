@@ -15,7 +15,6 @@ import p_img9_1 from "./p_img9_1.jpeg";
 import p_img9_2 from "./p_img9_2.jpeg";
 import p_img10_1 from "./p_img10_1.jpeg";
 import p_img10_2 from "./p_img10_2.jpeg";
-
 import profile_icon from "./account-circle-line.png";
 import menu_icon from "./menu-line.png";
 import dropdown_icon from "./arrow-down-line.png";
@@ -23,11 +22,13 @@ import hero_img from "./8278216_3852578.jpg";
 import exchange_icon from "./exchange-line.png";
 import quality_icon from "./verified-badge-line.png";
 import customer_icon from "./customer-service-line.png";
+import cross_icon from "./cross_icon.png";
 import star_dull_icon from "./star_dull_icon.png";
 import star_icon from "./star_icon.png";
 import bin_icon from "./bin_icon.png";
 import stripe_logo from "./stripe_logo.png";
 import razorpay_logo from "./razorpay_logo.png";
+
 
 export const assets = {
   razorpay_logo,
@@ -43,8 +44,10 @@ export const assets = {
   exchange_icon,
   quality_icon,
   customer_icon,
+  cross_icon,
   star_dull_icon,
     star_icon,
+
 };
 
 export const products = [
