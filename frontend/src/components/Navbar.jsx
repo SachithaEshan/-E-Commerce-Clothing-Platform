@@ -2,10 +2,14 @@ import React, { useState, useContext } from "react";
 import { assets } from "../assets/assets";
 import { Link, NavLink } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
+import { useContext } from "react";
+
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
+  const {setShowSearch} = useContext(ShopContext);
   const { getCartCount } = useContext(ShopContext);
+
   return (
     <div className="flex items-center justify-between py-5 font-medium">
       <Link to="/">
@@ -18,7 +22,7 @@ const Navbar = () => {
           <hr className="w-2/4 border-none h-[1.5px] bg-gray-700 hidden" />
         </NavLink>
         <NavLink to="/collection" className="flex flex-col items-center gap-1">
-          <p>SHOP</p>
+          <p>COLLECTION</p>
           <hr className="w-2/4 border-none h-[1.5px] bg-gray-700 hidden" />
         </NavLink>
         <NavLink to="/about" className="flex flex-col items-center gap-1">
@@ -31,8 +35,10 @@ const Navbar = () => {
         </NavLink>
       </ul>
       <div className="flex items-center gap-6">
-        <img src={assets.search_icon} className="w-5 cursor-pointer" alt="" />
-        <div className="relative group">
+
+        <img onClick={()=>setShowSearch(true)} src={assets.search_icon} className="w-5 cursor-pointer" alt="" />
+        <div className="group relative">
+
           <img className="w-5 cursor-pointer" src={assets.profile_icon} />
           <div className="absolute right-0 hidden pt-4 group-hover:block dropdown-menu">
             <div className="flex flex-col gap-2 px-5 py-3 text-gray-500 rounded w-36 bg-slate-100">
