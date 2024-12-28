@@ -1,7 +1,7 @@
 import React from "react";
 import Title from "../components/Title";
 import contactUsImage from "../assets/cu2.jpg";
-import NewsLetterBox from "../components/NewsLetterBox"; // Adjust the path as needed
+import NewsLetterBox from "../components/NewsLetterBox"; 
 
 const Contact = () => {
   return (
@@ -26,7 +26,9 @@ const Contact = () => {
           </button>
         </div>
       </div>
+
       <NewsLetterBox />
+
     </div>
   );
 };
