@@ -17,12 +17,16 @@ env:
 # This is the workflow that is being run.
 jobs:
   build-and-deploy:
-    # This is telling GitHub to run the workflow on the latest version of Ubuntu.
     runs-on: ubuntu-latest
     steps:
-      # Checkout the code from the GitHub repository
+      - name: Use Node.js 20.x
+        uses: actions/setup-node@v3
+        with:
+          node-version: 20
+
       - name: Checkout code
         uses: actions/checkout@v2
+      # Rest of the steps
 
       # Install dependencies and run tests for the client application
       - name: Install and Test Client
