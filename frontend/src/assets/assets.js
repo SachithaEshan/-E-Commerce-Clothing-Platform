@@ -25,9 +25,15 @@ import customer_icon from "./customer-service-line.png";
 import cross_icon from "./cross_icon.png";
 import star_dull_icon from "./star_dull_icon.png";
 import star_icon from "./star_icon.png";
+import bin_icon from "./bin_icon.png";
+import stripe_logo from "./stripe_logo.png";
+import razorpay_logo from "./razorpay_logo.png";
 
 
 export const assets = {
+  razorpay_logo,
+  stripe_logo,
+  bin_icon,
   logo,
   cart_icon,
   profile_icon,
