@@ -29,14 +29,14 @@ jobs:
       # Rest of the steps
 
       # Install dependencies and run tests for the client application
-      - name: Install and Test Client
+      - name: Install and Test Frontend
         working-directory: ./frontend
         run: |
           npm install
           npm run test
 
       # Install dependencies, export environment variables to be used by application and run tests for the server application
-      - name: Install and Test Server
+      - name: Install and Test Backend
         working-directory: ./backend
         run: |
           npm install
