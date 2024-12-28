@@ -1,5 +1,5 @@
-import { createContext,useState } from "react";
-import { createContext, useEffect, useState } from "react";
+import { createContext,useState,useEffect } from "react";
+
 import { products } from "../assets/assets";
 import { toast } from "react-toastify";
 
@@ -53,7 +53,7 @@ const ShopContextProvider = (props) => {
     products,
     currency,
     delivery_fee,
-    search,setSearch,showSearch,setShowSearch
+    search,setSearch,showSearch,setShowSearch,
     cartItems,
     addToCart,
     getCartCount,
