@@ -1,7 +1,8 @@
 import React from "react";
 import Title from "../components/Title";
 import aboutUsImage from "../assets/about-us.jpg";
-import NewsLetterBox from "../components/NewsLetterBox"; // Adjust the path as needed
+import NewsLetterBox from "../components/NewsLetterBox"; 
+
 
 const About = () => {
   return (
@@ -67,6 +68,7 @@ const About = () => {
             ensuring your satisfaction is our top priority.
           </p>
         </div>
+
       </div>
       <NewsLetterBox />
     </div>
