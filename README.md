@@ -6,9 +6,11 @@
 
 (React.js, Node.js, Express, MongoDB) with the following features and requirements:
 
-_• Frontend: React.js for dynamic, interactive client-side rendering_
-_• Admin Panel: Admin dashboard for handle_
-_• Backend: Node.js with Express for REST API development_
-_• Database: MongoDB for data persistence_
-_• Communication: WebSockets for real-time functionality_
-_• Key Features: CRUD operations for multiple entities, secure user authentication, role-based access, and distributed architecture._
+<ul>
+<li>Frontend: React.js for dynamic, interactive client-side rendering</li>
+<li>Admin Panel: Admin dashboard for handle</li>
+<li>Backend: Node.js with Express for REST API development</li>
+<li>Database: MongoDB for data persistence</li>
+<li>Communication: WebSockets for real-time functionality</li>
+<li>Key Features: CRUD operations for multiple entities, secure user authentication, role-based access, and distributed architecture.</li>
+</ul>
