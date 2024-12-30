@@ -1,9 +1,16 @@
-# pusl3120-assessment-template
+# PUSL3120 FULL-STACK DEVELOPMENT
 
-This is the template for your Pusl3120 Assessment. It uses a single repo.
+## Project Scope for Hotel Room Booking System (MERN Stack ) Overview
 
-Refer to the brief document for details regarding what is required.
+### This project involves building a Hotel Room Booking System using the MERN stack
 
-It also contains a .gitignore file, which should prevent unnecessary (temporary) files being committed (specific to Node.js, which is required).
+(React.js, Node.js, Express, MongoDB) with the following features and requirements:
 
-The top level should have a single compose file, and separate directories for each application / component / container.
+<ul>
+<li><b>Frontend:</b> React.js for dynamic, interactive client-side rendering</li>
+<li><b>Admin Panel:</b> Admin dashboard for handle</li>
+<li><b>Backend:</b> Node.js with Express for REST API development</li>
+<li><b>Database:</b> MongoDB for data persistence</li>
+<li><b>Communication:</b> WebSockets for real-time functionality</li>
+<li><b>Key Features:</b> CRUD operations for multiple entities, secure user authentication, role-based access, and distributed architecture.</li>
+</ul>
