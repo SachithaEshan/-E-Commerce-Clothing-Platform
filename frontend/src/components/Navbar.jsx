@@ -2,11 +2,7 @@ import React, { useState, useContext } from "react";
 import { assets } from "../assets/assets";
 import { Link, NavLink } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
-<<<<<<< HEAD
 
-
-=======
->>>>>>> 2f1c0937b3f168796726a8d69c4286e57c78f792
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
