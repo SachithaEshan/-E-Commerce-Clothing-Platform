@@ -10,6 +10,7 @@ const Login = () => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+
   const onSubmitHandler = async (event) => {
     event.preventDefault();
     try {
@@ -22,6 +23,8 @@ const Login = () => {
         if (response.data.success) {
           setToken(response.data.token);
           localStorage.setItem("token", response.data.token);
+          localStorage.setItem("email", email);
+          localStorage.setItem("psw", password);
         } else {
           toast.error(response.data.message);
         }
@@ -33,6 +36,8 @@ const Login = () => {
         if (response.data.success) {
           setToken(response.data.token);
           localStorage.setItem("token", response.data.token);
+          localStorage.setItem("email", email);
+          localStorage.setItem("psw", password);
         } else {
           toast.error(response.data.message);
         }
