@@ -1,8 +1,9 @@
-import { createContext, useEffect, useState } from "react";
-import { products } from "../assets/assets";
+import { createContext, useState, useEffect } from "react";
+import { products } from "../assets/assets"; // Ensure products is defined in assets
 import { toast } from "react-toastify";
-import {useNavigate} from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
+// Create context for shop
 export const ShopContext = createContext();
 
 const ShopContextProvider = (props) => {
@@ -12,17 +13,26 @@ const ShopContextProvider = (props) => {
   const [search, setSearch] = useState('');
   const [showSearch, setShowSearch] = useState(false);
   
-  const [cartItems, setCartItems] = useState([]);
-  
-  
+  // Initialize cartItems state, consider loading from localStorage if needed
+  const [cartItems, setCartItems] = useState(() => {
+    // Optionally load cart items from localStorage
+    const savedCart = localStorage.getItem("cartItems");
+    return savedCart ? JSON.parse(savedCart) : {};
+  });
+
+  // New state for managing userId
+  const [userId, setUserId] = useState(null);
+
   const navigate = useNavigate();
 
-
+  // Add to Cart Functionality
   const addToCart = async (itemId, size) => {
     if (!size) {
       toast.error("Select a size to continue.");
     }
-    let cartData = structuredClone(cartItems);
+    
+    // Clone the cartItems object to avoid direct mutation
+    let cartData = structuredClone(cartItems); // or use JSON.parse(JSON.stringify(cartItems)) for compatibility
 
     if (cartData[itemId]) {
       if (cartData[itemId][size]) {
@@ -35,9 +45,12 @@ const ShopContextProvider = (props) => {
       cartData[itemId][size] = 1;
     }
 
+    // Update cartItems state and localStorage
     setCartItems(cartData);
+    localStorage.setItem("cartItems", JSON.stringify(cartData)); // Save cartItems in localStorage
   };
 
+  // Get Cart Count
   const getCartCount = () => {
     let totalCount = 0;
     for (const items in cartItems) {
@@ -49,49 +62,63 @@ const ShopContextProvider = (props) => {
         } catch (error) {}
       }
     }
-
     return totalCount;
-  }
+  };
 
-   const updateQuantity = async (itemID,size,quantity) =>{
-    let cartData = structuredClone(cartItems);
+  // Update Cart Quantity
+  const updateQuantity = async (itemID, size, quantity) => {
+    let cartData = structuredClone(cartItems); // or use JSON.parse(JSON.stringify(cartItems)) for compatibility
     cartData[itemID][size] = quantity;
-    setCartItems(cartData);
-   }
 
-   const getCartAmount =  () => {
+    // Update cartItems state and localStorage
+    setCartItems(cartData);
+    localStorage.setItem("cartItems", JSON.stringify(cartData)); // Save updated cartItems to localStorage
+  };
+
+  // Get Cart Amount
+  const getCartAmount = () => {
     let totalAmount = 0;
-    for(const items in cartItems){
-      let itemInfo = products.find((product)=> product._id === items);
-      for ( const item in cartItems[items]){
-        try{
-          if (cartItems[items][item]>0){
+    for (const items in cartItems) {
+      let itemInfo = products.find((product) => product._id === items);
+      for (const item in cartItems[items]) {
+        try {
+          if (cartItems[items][item] > 0) {
             totalAmount += itemInfo.price * cartItems[items][item];
           }
-        } catch (error){
-
-        }
+        } catch (error) {}
+      }
     }
-  }
     return totalAmount;
-   }
-  
+  };
 
+  // Update userId (e.g., after login)
+  const setUser = (id) => {
+    setUserId(id);
+  };
 
+  // Value object to pass down through context
   const value = {
     products,
     currency,
     delivery_fee,
-    search,setSearch,showSearch,setShowSearch,
+    search,
+    setSearch,
+    showSearch,
+    setShowSearch,
     cartItems,
     addToCart,
-    getCartCount,updateQuantity,
+    getCartCount,
+    updateQuantity,
     getCartAmount,
-    navigate
+    navigate,
+    userId,      // Add userId here
+    setUser      // Add setUser function here
   };
 
   return (
-    <ShopContext.Provider value={value}>{props.children}</ShopContext.Provider>
+    <ShopContext.Provider value={value}>
+      {props.children}
+    </ShopContext.Provider>
   );
 };
 
