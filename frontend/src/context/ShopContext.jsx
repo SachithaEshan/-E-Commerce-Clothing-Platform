@@ -1,8 +1,11 @@
-import { createContext, useEffect, useState } from "react";
+
+import { createContext, useState, useEffect } from "react";
+import { products } from "../assets/assets"; // Ensure products is defined in assets
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
+
+// Create context for shop
 export const ShopContext = createContext();
 
 const ShopContextProvider = (props) => {
@@ -12,17 +15,33 @@ const ShopContextProvider = (props) => {
   const backendURL = import.meta.env.VITE_BACKEND_URL;
   const [search, setSearch] = useState("");
   const [showSearch, setShowSearch] = useState(false);
+
+  
+  // Initialize cartItems state, consider loading from localStorage if needed
+  const [cartItems, setCartItems] = useState(() => {
+    // Optionally load cart items from localStorage
+    const savedCart = localStorage.getItem("cartItems");
+    return savedCart ? JSON.parse(savedCart) : {};
+  });
+
+  // New state for managing userId
+  const [userId, setUserId] = useState(null);
+
+
   const [products, setProducts] = useState([]);
   const [cartItems, setCartItems] = useState([]);
   const [token, setToken] = useState("");
 
-  const navigate = useNavigate();
 
+
+  // Add to Cart Functionality
   const addToCart = async (itemId, size) => {
     if (!size) {
       toast.error("Select a size to continue.");
     }
-    let cartData = structuredClone(cartItems);
+    
+    // Clone the cartItems object to avoid direct mutation
+    let cartData = structuredClone(cartItems); // or use JSON.parse(JSON.stringify(cartItems)) for compatibility
 
     if (cartData[itemId]) {
       if (cartData[itemId][size]) {
@@ -35,9 +54,12 @@ const ShopContextProvider = (props) => {
       cartData[itemId][size] = 1;
     }
 
+    // Update cartItems state and localStorage
     setCartItems(cartData);
+    localStorage.setItem("cartItems", JSON.stringify(cartData)); // Save cartItems in localStorage
   };
 
+  // Get Cart Count
   const getCartCount = () => {
     let totalCount = 0;
     for (const items in cartItems) {
@@ -49,15 +71,24 @@ const ShopContextProvider = (props) => {
         } catch (error) {}
       }
     }
-
     return totalCount;
   };
 
+
+  // Update Cart Quantity
+  const updateQuantity = async (itemID, size, quantity) => {
+    let cartData = structuredClone(cartItems); // or use JSON.parse(JSON.stringify(cartItems)) for compatibility
+
   const updateQuantity = async (itemID, size, quantity) => {
     let cartData = structuredClone(cartItems);
-    cartData[itemID][size] = quantity;
+;
+
+    // Update cartItems state and localStorage
     setCartItems(cartData);
+
+    localStorage.setItem("cartItems", JSON.stringify(cartData)); // Save updated cartItems to localStorage
   };
+
 
   const getCartAmount = () => {
     let totalAmount = 0;
@@ -73,6 +104,14 @@ const ShopContextProvider = (props) => {
     }
     return totalAmount;
   };
+
+
+  // Update userId (e.g., after login)
+  const setUser = (id) => {
+    setUserId(id);
+  };
+
+  // Value object to pass down through context
 
   const getProductsData = async () => {
     try {
@@ -97,6 +136,7 @@ const ShopContextProvider = (props) => {
       setToken(token && localStorage.getItem("token"));
     }
   });
+
   const value = {
     products,
     currency,
@@ -111,13 +151,16 @@ const ShopContextProvider = (props) => {
     updateQuantity,
     getCartAmount,
     navigate,
-    backendURL,
-    setToken,
-    token,
+
+    userId,      // Add userId here
+    setUser      // Add setUser function here
+
   };
 
   return (
-    <ShopContext.Provider value={value}>{props.children}</ShopContext.Provider>
+    <ShopContext.Provider value={value}>
+      {props.children}
+    </ShopContext.Provider>
   );
 };
 
