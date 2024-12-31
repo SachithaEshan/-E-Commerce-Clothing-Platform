@@ -1,7 +1,9 @@
+
 import { createContext, useState, useEffect } from "react";
 import { products } from "../assets/assets"; // Ensure products is defined in assets
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
+
 
 // Create context for shop
 export const ShopContext = createContext();
@@ -10,8 +12,10 @@ const ShopContextProvider = (props) => {
   const currency = "$";
   const delivery_fee = 10;
 
-  const [search, setSearch] = useState('');
+  const backendURL = import.meta.env.VITE_BACKEND_URL;
+  const [search, setSearch] = useState("");
   const [showSearch, setShowSearch] = useState(false);
+
   
   // Initialize cartItems state, consider loading from localStorage if needed
   const [cartItems, setCartItems] = useState(() => {
@@ -23,7 +27,12 @@ const ShopContextProvider = (props) => {
   // New state for managing userId
   const [userId, setUserId] = useState(null);
 
-  const navigate = useNavigate();
+
+  const [products, setProducts] = useState([]);
+  const [cartItems, setCartItems] = useState([]);
+  const [token, setToken] = useState("");
+
+
 
   // Add to Cart Functionality
   const addToCart = async (itemId, size) => {
@@ -65,17 +74,22 @@ const ShopContextProvider = (props) => {
     return totalCount;
   };
 
+
   // Update Cart Quantity
   const updateQuantity = async (itemID, size, quantity) => {
     let cartData = structuredClone(cartItems); // or use JSON.parse(JSON.stringify(cartItems)) for compatibility
-    cartData[itemID][size] = quantity;
+
+  const updateQuantity = async (itemID, size, quantity) => {
+    let cartData = structuredClone(cartItems);
+;
 
     // Update cartItems state and localStorage
     setCartItems(cartData);
+
     localStorage.setItem("cartItems", JSON.stringify(cartData)); // Save updated cartItems to localStorage
   };
 
-  // Get Cart Amount
+
   const getCartAmount = () => {
     let totalAmount = 0;
     for (const items in cartItems) {
@@ -91,12 +105,38 @@ const ShopContextProvider = (props) => {
     return totalAmount;
   };
 
+
   // Update userId (e.g., after login)
   const setUser = (id) => {
     setUserId(id);
   };
 
   // Value object to pass down through context
+
+  const getProductsData = async () => {
+    try {
+      const response = await axios.get(backendURL + "/api/product/list");
+      if (response.data.success) {
+        setProducts(response.data.products);
+      } else {
+        toast.error(response.data.message);
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(error.message);
+    }
+  };
+
+  useEffect(() => {
+    getProductsData();
+  });
+
+  useEffect(() => {
+    if (!token && localStorage.getItem("token")) {
+      setToken(token && localStorage.getItem("token"));
+    }
+  });
+
   const value = {
     products,
     currency,
@@ -111,8 +151,10 @@ const ShopContextProvider = (props) => {
     updateQuantity,
     getCartAmount,
     navigate,
+
     userId,      // Add userId here
     setUser      // Add setUser function here
+
   };
 
   return (
