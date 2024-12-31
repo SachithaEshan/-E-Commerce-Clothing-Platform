@@ -1,34 +1,3 @@
-
-import React, { useState, useContext } from "react";
-import { ShopContext } from "../context/ShopContext";
-import { toast } from "react-toastify";
-
-const Login = () => {
-  const [currentState, setCurrentState] = useState("Sign Up");
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-
-  const { setUser } = useContext(ShopContext);  // Access the setUser function from the context
-
-  // Handle form submission (for both login and sign up)
-  const onSubmitHandler = async (event) => {
-    event.preventDefault();
-
-    // Simulate a login API call
-    if (currentState === "Login") {
-      // Example API call result
-      const userId = "12345"; // In reality, this should come from your API
-
-      if (userId) {
-        setUser(userId);  // Store the userId in the context
-        toast.success("Logged in successfully");
-      } else {
-        toast.error("Invalid credentials");
-      }
-    } else {
-      // Simulate sign-up functionality (You would likely call an API here)
-      toast.success("Account created successfully");
-
 import React, { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import axios from "axios";
@@ -71,7 +40,6 @@ const Login = () => {
     } catch (error) {
       console.log(error);
       toast.error(error.message);
-
     }
   };
 
@@ -106,8 +74,6 @@ const Login = () => {
         type="email"
         className="w-full px-3 py-2 border border-gray-800"
         placeholder="Email"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)} // Update email state
         required
       />
       <input
@@ -116,8 +82,6 @@ const Login = () => {
         type="password"
         className="w-full px-3 py-2 border border-gray-800"
         placeholder="Password"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)} // Update password state
         required
       />
       <div className="w-full flex justify-between text-sm mt-2">
