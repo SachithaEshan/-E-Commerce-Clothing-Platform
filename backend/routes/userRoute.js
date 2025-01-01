@@ -7,6 +7,7 @@ import {
   dataUser,
   updateUser,
   deleteUser,
+  allUsers,
 } from "../controllers/userController.js";
 
 const userRouter = express.Router();
@@ -17,5 +18,6 @@ userRouter.post("/admin", adminLogin);
 userRouter.post("/data", dataUser);
 userRouter.post("/updateuser", updateUser);
 userRouter.post("/deleteuser", deleteUser);
+userRouter.post("/allusers", allUsers);
 
 export default userRouter;

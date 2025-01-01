@@ -127,7 +127,7 @@ const updateUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
   try {
-    const { email } = req.body;
+    const email = req.body;
 
     const result = await userModel.deleteOne({ email: email });
 
@@ -141,6 +141,19 @@ const deleteUser = async (req, res) => {
     res.json({ success: false, message: error.message });
   }
 };
+
+const allUsers = async (req, res) => {
+  try {
+    const token = req.body;
+    const documents = await userModel.find(); // Fetch all documents
+
+    res.json({ success: true, message: "recived", token, documents });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+};
+
 const adminLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -167,4 +180,5 @@ export {
   dataUser,
   updateUser,
   deleteUser,
+  allUsers,
 };
