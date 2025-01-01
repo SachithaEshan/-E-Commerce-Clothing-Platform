@@ -30,6 +30,29 @@ const loginUser = async (req, res) => {
   }
 };
 
+const dataUser = async (req, res) => {
+  try {
+    const { email, psw } = req.body;
+
+    const user = await userModel.findOne({ email });
+
+    if (!user) {
+      return res.json({ success: false, message: "User doesn't exists" });
+    }
+    const isMatch = await bcrypt.compare(psw, user.password);
+    const userName = user.name;
+
+    if (isMatch) {
+      res.json({ success: true, userName });
+    } else {
+      res.json({ success: false, message: "Invalid credentials" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+};
+
 const registerUser = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -70,6 +93,67 @@ const registerUser = async (req, res) => {
   }
 };
 
+const updateUser = async (req, res) => {
+  try {
+    const { email, passwords, newpassword } = req.body;
+
+    const user = await userModel.findOne({ email });
+
+    const isMatch = await bcrypt.compare(passwords, user.password);
+
+    if (isMatch) {
+      const salt = await bcrypt.genSalt(10);
+      const hashednewPassword = await bcrypt.hash(newpassword, salt);
+
+      const updatedUser = await userModel.findOneAndUpdate(
+        { email: email },
+        { $set: { password: hashednewPassword } },
+        { new: true }
+      );
+
+      if (!updatedUser) {
+        res.json({ success: false, message: "Error while setting password" });
+      } else {
+        res.json({ success: true, message: "Password updated" });
+      }
+    } else {
+      res.json({ success: false, message: "Invalid credentials" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+};
+
+const deleteUser = async (req, res) => {
+  try {
+    const email = req.body;
+
+    const result = await userModel.deleteOne({ email: email });
+
+    if (result.deletedCount === 0) {
+      res.json({ success: false, message: "No user found with this email" });
+    } else {
+      res.json({ success: true, message: "User deleted successfully" });
+    }
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+};
+
+const allUsers = async (req, res) => {
+  try {
+    const token = req.body;
+    const documents = await userModel.find(); // Fetch all documents
+
+    res.json({ success: true, message: "recived", token, documents });
+  } catch (error) {
+    console.log(error);
+    res.json({ success: false, message: error.message });
+  }
+};
+
 const adminLogin = async (req, res) => {
   try {
     const { email, password } = req.body;
@@ -89,4 +173,12 @@ const adminLogin = async (req, res) => {
   }
 };
 
-export { loginUser, registerUser, adminLogin };
+export {
+  loginUser,
+  registerUser,
+  adminLogin,
+  dataUser,
+  updateUser,
+  deleteUser,
+  allUsers,
+};

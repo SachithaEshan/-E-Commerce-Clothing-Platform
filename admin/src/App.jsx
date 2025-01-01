@@ -6,6 +6,7 @@ import Add from "./pages/Add";
 import List from "./pages/List";
 import Orders from "./pages/Orders";
 import Login from "./components/Login";
+import Allusers from "./pages/Allusers";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/ReactToastify.css";
 import { useEffect } from "react";
@@ -38,6 +39,10 @@ const App = () => {
                 <Route
                   path="/orders"
                   element={<Orders setToken={setToken} />}
+                />
+                <Route
+                  path="/allusers"
+                  element={<Allusers setToken={setToken} />}
                 />
               </Routes>
             </div>
