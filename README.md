@@ -1,8 +1,8 @@
 # PUSL3120 FULL-STACK DEVELOPMENT
 
-## Project Scope for Hotel Room Booking System (MERN Stack ) Overview
+## Project Scope for eCommerce System (SPORTS WEAR) | (MERN Stack ) Overview
 
-### This project involves building a Hotel Room Booking System using the MERN stack
+### This project involves building a eCommerce System (SPORTS WEAR) using the MERN stack
 
 (React.js, Node.js, Express, MongoDB) with the following features and requirements:
 
