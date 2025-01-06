@@ -25,6 +25,9 @@ const Login = () => {
           localStorage.setItem("token", response.data.token);
           localStorage.setItem("email", email);
           localStorage.setItem("psw", password);
+
+          toast.success("Welcome Mr/Mrs/Miss" + name + " !");
+          toast.success("Your are successfully registered!");
         } else {
           toast.error(response.data.message);
         }
@@ -38,6 +41,8 @@ const Login = () => {
           localStorage.setItem("token", response.data.token);
           localStorage.setItem("email", email);
           localStorage.setItem("psw", password);
+
+          toast.success("Welcome Back Again!");
         } else {
           toast.error(response.data.message);
         }
