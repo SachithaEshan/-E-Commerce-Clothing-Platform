@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 import { assets } from "../assets/assets";
 import RelatedProducts from "../components/RelatedProducts";
-import Review from '../components/Review';
+import Review from "../components/Review";
 
 const Product = () => {
   const { productId } = useParams();
@@ -11,22 +11,34 @@ const Product = () => {
   const [productData, setProductData] = useState(false);
   const [image, setImage] = useState("");
   const [size, setSize] = useState("");
-  const [activeTab, setActiveTab] = useState("description"); // To switch between tabs
+  const [activeTab, setActiveTab] = useState("description");
 
-  const fetchProductData = async () => {
-    products.map((item) => {
-      if (item._id === productId) {
-        setProductData(item);
-        setImage(item.image[0]);
-        return null;
-      }
-    });
+  // const fetchProductData = async () => {
+  //   products.map((item) => {
+  //     if (item._id === productId) {
+  //       setProductData(item);
+  //       setImage(item.image[0]);
+  //       return null;
+  //     }
+  //   });
+  // };
+
+  // useEffect(() => {
+  //   fetchProductData();
+  //   window.scrollTo(0, 0);
+  // }, [productId]);
+
+  const fetchProductData = () => {
+    const foundProduct = products.find((item) => item._id === productId);
+    if (foundProduct) {
+      setProductData(foundProduct);
+      setImage(foundProduct.image[0]);
+    }
   };
 
   useEffect(() => {
     fetchProductData();
-    window.scrollTo(0, 0);
-  }, [productId]);
+  }, [productId, products]);
 
   return productData ? (
     <div className="pt-10 transition-opacity duration-500 ease-in border-t-2 opacity-100">
@@ -72,7 +84,9 @@ const Product = () => {
               {productData.sizes.map((item, index) => (
                 <button
                   onClick={() => setSize(item)}
-                  className={`border py-2 px-4 bg-gray-100 ${item === size ? "border-orange-500" : ""}`}
+                  className={`border py-2 px-4 bg-gray-100 ${
+                    item === size ? "border-orange-500" : ""
+                  }`}
                   key={index}
                 >
                   {item}
@@ -100,13 +114,17 @@ const Product = () => {
         <div className="flex">
           <button
             onClick={() => setActiveTab("description")}
-            className={`px-5 py-3 text-sm border ${activeTab === "description" ? "border-b-2 border-black" : ""}`}
+            className={`px-5 py-3 text-sm border ${
+              activeTab === "description" ? "border-b-2 border-black" : ""
+            }`}
           >
             Description
           </button>
           <button
             onClick={() => setActiveTab("reviews")}
-            className={`px-5 py-3 text-sm border ${activeTab === "reviews" ? "border-b-2 border-black" : ""}`}
+            className={`px-5 py-3 text-sm border ${
+              activeTab === "reviews" ? "border-b-2 border-black" : ""
+            }`}
           >
             Reviews
           </button>
