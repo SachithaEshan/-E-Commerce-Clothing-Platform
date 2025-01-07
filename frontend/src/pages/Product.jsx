@@ -23,7 +23,6 @@ const Product = () => {
 
   useEffect(() => {
     fetchProductData();
-    // window.scrollTo(0, 0);
   }, [productId, products]);
 
   return productData ? (
