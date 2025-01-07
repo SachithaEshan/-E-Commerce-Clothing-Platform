@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 import { assets } from "../assets/assets";
 import RelatedProducts from "../components/RelatedProducts";
+import Review from '../components/Review';
 
 const Product = () => {
   const { productId } = useParams();
@@ -10,6 +11,7 @@ const Product = () => {
   const [productData, setProductData] = useState(false);
   const [image, setImage] = useState("");
   const [size, setSize] = useState("");
+  const [activeTab, setActiveTab] = useState("description"); // To switch between tabs
 
   const fetchProductData = () => {
     const foundProduct = products.find((item) => item._id === productId);
@@ -25,7 +27,7 @@ const Product = () => {
 
   return productData ? (
     <div className="pt-10 transition-opacity duration-500 ease-in border-t-2 opacity-100">
-      {/* ----- Product Data -----*/}
+      {/* ----- Product Data ----- */}
       <div className="flex flex-col gap-12 sm:gap-12 sm:flex-row">
         {/* ----- Product Images ----- */}
         <div className="flex flex-col-reverse flex-1 gap-3 sm:flex-row">
@@ -43,7 +45,7 @@ const Product = () => {
             <img className="w-full h-auto" src={image} alt="" />
           </div>
         </div>
-        {/*-----Product Info-----*/}
+        {/*----- Product Info -----*/}
         <div className="flex-1">
           <h1 className="mt-2 text-2xl font-medium">{productData.name}</h1>
           <div className="flex items-center gap-1 mt-2">
@@ -95,16 +97,32 @@ const Product = () => {
       {/* ------ Description & Review Section ------- */}
       <div className="mt-20">
         <div className="flex">
-          <p className="px-5 py-3 text-sm border"> Description </p>
-          <p className="px-5 py-3 text-sm border"> Reviews (122) </p>
+          <button
+            onClick={() => setActiveTab("description")}
+            className={`px-5 py-3 text-sm border ${activeTab === "description" ? "border-b-2 border-black" : ""}`}
+          >
+            Description
+          </button>
+          <button
+            onClick={() => setActiveTab("reviews")}
+            className={`px-5 py-3 text-sm border ${activeTab === "reviews" ? "border-b-2 border-black" : ""}`}
+          >
+            Reviews
+          </button>
         </div>
-        <div className="flex flex-col gap-4 px-6 py-6 text-sm text-gray-500 border">
-          <p> {productData.detailedDescription} </p>
-        </div>
+        {activeTab === "description" ? (
+          <div className="flex flex-col gap-4 px-6 py-6 text-sm text-gray-500 border">
+            <p> {productData.detailedDescription} </p>
+          </div>
+        ) : (
+          <div className="flex flex-col gap-4 px-6 py-6 text-sm text-gray-500 border">
+            {/* Integrating the Review component */}
+            <Review productId={productId} />
+          </div>
+        )}
       </div>
 
       {/* ------ Similar Products Section ------- */}
-
       <RelatedProducts
         category={productData.category}
         subCategory={productData.subCategory}
