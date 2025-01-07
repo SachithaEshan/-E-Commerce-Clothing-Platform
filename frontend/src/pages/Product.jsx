@@ -13,21 +13,6 @@ const Product = () => {
   const [size, setSize] = useState("");
   const [activeTab, setActiveTab] = useState("description");
 
-  // const fetchProductData = async () => {
-  //   products.map((item) => {
-  //     if (item._id === productId) {
-  //       setProductData(item);
-  //       setImage(item.image[0]);
-  //       return null;
-  //     }
-  //   });
-  // };
-
-  // useEffect(() => {
-  //   fetchProductData();
-  //   window.scrollTo(0, 0);
-  // }, [productId]);
-
   const fetchProductData = () => {
     const foundProduct = products.find((item) => item._id === productId);
     if (foundProduct) {
@@ -38,6 +23,7 @@ const Product = () => {
 
   useEffect(() => {
     fetchProductData();
+    // window.scrollTo(0, 0);
   }, [productId, products]);
 
   return productData ? (

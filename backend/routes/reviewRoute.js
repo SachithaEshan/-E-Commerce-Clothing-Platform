@@ -5,14 +5,12 @@ const reviewRouter = express.Router();
 
 reviewRouter.post("/addnewreview", addNewReview);
 
-reviewRouter.get("/", getReviews); // New route to fetch reviews
+reviewRouter.get("/", getReviews); 
 
 reviewRouter.put("/updateReview", updateReview);
 
 
 reviewRouter.delete("/deleteReview", deleteReview);
-
-
 
 
 export default reviewRouter;
