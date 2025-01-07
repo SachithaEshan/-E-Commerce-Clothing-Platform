@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
 import { assets } from "../assets/assets";
 import RelatedProducts from "../components/RelatedProducts";
-import Review from '../components/Review';
+import Review from "../components/Review";
 
 const Product = () => {
   const { productId } = useParams();
@@ -11,7 +11,7 @@ const Product = () => {
   const [productData, setProductData] = useState(false);
   const [image, setImage] = useState("");
   const [size, setSize] = useState("");
-  const [activeTab, setActiveTab] = useState("description"); // To switch between tabs
+  const [activeTab, setActiveTab] = useState("description");
 
   const fetchProductData = () => {
     const foundProduct = products.find((item) => item._id === productId);
@@ -99,13 +99,17 @@ const Product = () => {
         <div className="flex">
           <button
             onClick={() => setActiveTab("description")}
-            className={`px-5 py-3 text-sm border ${activeTab === "description" ? "border-b-2 border-black" : ""}`}
+            className={`px-5 py-3 text-sm border ${
+              activeTab === "description" ? "border-b-2 border-black" : ""
+            }`}
           >
             Description
           </button>
           <button
             onClick={() => setActiveTab("reviews")}
-            className={`px-5 py-3 text-sm border ${activeTab === "reviews" ? "border-b-2 border-black" : ""}`}
+            className={`px-5 py-3 text-sm border ${
+              activeTab === "reviews" ? "border-b-2 border-black" : ""
+            }`}
           >
             Reviews
           </button>
