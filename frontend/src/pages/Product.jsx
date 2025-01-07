@@ -13,20 +13,17 @@ const Product = () => {
   const [size, setSize] = useState("");
   const [activeTab, setActiveTab] = useState("description"); // To switch between tabs
 
-  const fetchProductData = async () => {
-    products.map((item) => {
-      if (item._id === productId) {
-        setProductData(item);
-        setImage(item.image[0]);
-        return null;
-      }
-    });
+  const fetchProductData = () => {
+    const foundProduct = products.find((item) => item._id === productId);
+    if (foundProduct) {
+      setProductData(foundProduct);
+      setImage(foundProduct.image[0]);
+    }
   };
 
   useEffect(() => {
     fetchProductData();
-    window.scrollTo(0, 0);
-  }, [productId]);
+  }, [productId, products]);
 
   return productData ? (
     <div className="pt-10 transition-opacity duration-500 ease-in border-t-2 opacity-100">
@@ -72,7 +69,9 @@ const Product = () => {
               {productData.sizes.map((item, index) => (
                 <button
                   onClick={() => setSize(item)}
-                  className={`border py-2 px-4 bg-gray-100 ${item === size ? "border-orange-500" : ""}`}
+                  className={`border py-2 px-4 bg-gray-100 ${
+                    item === size ? "border-orange-500" : ""
+                  }`}
                   key={index}
                 >
                   {item}
