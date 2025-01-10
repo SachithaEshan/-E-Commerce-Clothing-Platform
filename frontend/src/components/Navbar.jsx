@@ -5,9 +5,14 @@ import { ShopContext } from "../context/ShopContext";
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
-  const { setShowSearch, navigate, setToken, token, setCartItems } =
-    useContext(ShopContext);
-  const { getCartCount } = useContext(ShopContext);
+  const {
+    setShowSearch,
+    navigate,
+    setToken,
+    token,
+    setCartItems,
+    getCartCount,
+  } = useContext(ShopContext);
 
   const logout = () => {
     navigate("/login");

@@ -60,12 +60,15 @@ const Review = ({ productId }) => {
   const handleUpdateSubmit = async (event) => {
     event.preventDefault();
     try {
-      const response = await axios.put(`${backendURL}/api/reviews/updateReview`, {
-        productId,
-        email,
-        rating: editRating,
-        comment: editComment,
-      });
+      const response = await axios.put(
+        `${backendURL}/api/reviews/updateReview`,
+        {
+          productId,
+          email,
+          rating: editRating,
+          comment: editComment,
+        }
+      );
       if (response.data.success) {
         setReviews((prevReviews) =>
           prevReviews.map((r) =>
@@ -84,11 +87,16 @@ const Review = ({ productId }) => {
 
   const handleDeleteReview = async (reviewId) => {
     try {
-      const response = await axios.delete(`${backendURL}/api/reviews/deleteReview`, {
-        data: { productId, email },
-      });
+      const response = await axios.delete(
+        `${backendURL}/api/reviews/deleteReview`,
+        {
+          data: { productId, email },
+        }
+      );
       if (response.data.success) {
-        setReviews((prevReviews) => prevReviews.filter((r) => r._id !== reviewId));
+        setReviews((prevReviews) =>
+          prevReviews.filter((r) => r._id !== reviewId)
+        );
         toast.success("Review deleted successfully");
       }
     } catch (error) {
@@ -166,7 +174,9 @@ const Review = ({ productId }) => {
             </div>
           ))
         ) : (
-          <p className="text-gray-600">No reviews yet. Be the first to leave a review!</p>
+          <p className="text-gray-600">
+            No reviews yet. Be the first to leave a review!
+          </p>
         )}
       </div>
 
