@@ -3,6 +3,7 @@ import { ShopContext } from "../context/ShopContext";
 import Title from "../components/Title";
 import axios from "axios";
 import { toast } from "react-toastify";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const Profile = () => {
   const email = localStorage.getItem("email");
@@ -14,24 +15,37 @@ const Profile = () => {
   const [passwords, setPassword] = useState("");
   const [newpassword, setNewPassword] = useState("");
 
+  const recaptchaSiteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+  const [captchaToken, setCaptchaToken] = useState("");
+  const [DeleteCaptchaToken, setDeleteCaptchaToken] = useState("");
+
   const onSubmitHandler = async (event) => {
     event.preventDefault();
     try {
+      if (!captchaToken) {
+        toast.error("Please complete the CAPTCHA to proceed.");
+        return;
+      }
       if (passwords != newpassword) {
         const response = await axios.post(`${backendURL}/api/user/updateuser`, {
           email,
           passwords,
           newpassword,
+          captchaToken,
         });
         console.log(response.data);
-        toast.success("Password Update successfully");
-        toast.info("You need login again");
-        navigate("/login");
-        localStorage.removeItem("token");
-        localStorage.removeItem("email");
-        localStorage.removeItem("psw");
-        setToken("");
-        setCartItems({});
+        if (response.data.success) {
+          toast.success("Password Update successfully");
+          toast.info("You need login again");
+          navigate("/login");
+          localStorage.removeItem("token");
+          localStorage.removeItem("email");
+          localStorage.removeItem("psw");
+          setToken("");
+          setCartItems({});
+        } else {
+          toast.error(response.data.message);
+        }
       } else {
         toast.warn("Enter same password?");
       }
@@ -43,29 +57,38 @@ const Profile = () => {
 
   const onSubmitDeleteHandler = async (event) => {
     event.preventDefault();
-    toast.warn("This action cannot be undone");
+    if (!DeleteCaptchaToken) {
+      toast.error("Please complete the CAPTCHA to proceed.");
+      return;
+    }
 
     const isConfirmed = window.confirm(
-      "Are you sure you want to delete this user? This action cannot be undone."
+      "Are you sure you want to delete your sportswear account? This action can't be undone!"
     );
 
     if (isConfirmed) {
+      toast.warn("This action cannot be undone");
       try {
         const response = await axios.post(`${backendURL}/api/user/deleteuser`, {
           email,
+          DeleteCaptchaToken,
         });
 
         console.log(response.data);
-        toast.success("User deleted successfully!");
-        navigate("/login");
-        localStorage.removeItem("token");
-        localStorage.removeItem("email");
-        localStorage.removeItem("psw");
-        setToken("");
-        setCartItems({});
+        if (response.data.success) {
+          toast.success("User deleted successfully!");
+          navigate("/login");
+          localStorage.removeItem("token");
+          localStorage.removeItem("email");
+          localStorage.removeItem("psw");
+          setToken("");
+          setCartItems({});
+        } else {
+          toast.error(response.data.message);
+        }
       } catch (error) {
         console.log(error);
-        toast.error(error.message);
+        toast.error("An error occurred while deleting the user.");
       }
     } else {
       toast.info("User deletion canceled.");
@@ -87,9 +110,9 @@ const Profile = () => {
     };
 
     if (token) {
-      fetchData(); // Call the async function
+      fetchData();
     }
-  }, [token]); // Dependency array includes 'email'
+  }, [token]);
 
   return (
     <div className="border-t pt-16">
@@ -138,6 +161,11 @@ const Profile = () => {
           placeholder="New Password"
           required
         />
+        <ReCAPTCHA
+          sitekey={recaptchaSiteKey}
+          onChange={(token) => setCaptchaToken(token)}
+          onExpired={() => setCaptchaToken("")}
+        />
         <button className="bg-blue-500 text-white font-light px-8 py-2 mt-4">
           Save
         </button>
@@ -147,6 +175,11 @@ const Profile = () => {
         className="flex flex-col items-start w-[90%] sm:max-w-96 m-0 mt-14 gap-2 text-gray-800"
       >
         <label className="m-0 pt-0 text-red-500">Danger zone</label>
+        <ReCAPTCHA
+          sitekey={recaptchaSiteKey}
+          onChange={(token) => setDeleteCaptchaToken(token)}
+          onExpired={() => setDeleteCaptchaToken("")}
+        />
         <button className="bg-red-500 text-white font-light px-8 py-2 mt-4">
           Account Deletion
         </button>
