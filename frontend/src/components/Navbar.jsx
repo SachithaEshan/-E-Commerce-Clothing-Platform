@@ -7,11 +7,18 @@ const Navbar = () => {
   const [visible, setVisible] = useState(false);
   const {
     setShowSearch,
+<<<<<<< Updated upstream
+=======
+    getCartCount,
+>>>>>>> Stashed changes
     navigate,
     setToken,
     token,
     setCartItems,
+<<<<<<< Updated upstream
     getCartCount,
+=======
+>>>>>>> Stashed changes
   } = useContext(ShopContext);
 
   const logout = () => {
@@ -53,7 +60,7 @@ const Navbar = () => {
           className="w-5 cursor-pointer"
           alt=""
         />
-        <div className="group relative">
+        <div className="relative group">
           <img
             onClick={() => (token ? null : navigate("/login"))}
             className="w-5 cursor-pointer"

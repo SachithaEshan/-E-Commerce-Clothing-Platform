@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
-import { assets } from "../assets/assets";
-import RelatedProducts from "../components/RelatedProducts";
-import Review from "../components/Review";
+import { assets } from "../assets/assets.js";
+import RelatedProducts from "../components/RelatedProducts.jsx";
+import Review from "../components/Review.jsx";
 
 const Product = () => {
   const { productId } = useParams();
@@ -17,13 +17,21 @@ const Product = () => {
     const foundProduct = products.find((item) => item._id === productId);
     if (foundProduct) {
       setProductData(foundProduct);
-      setImage(foundProduct.image[0]);
+      if (!image || !productData || productData._id !== foundProduct._id) {
+        setImage(foundProduct.image[0]);
+      }
     }
   };
 
   useEffect(() => {
     fetchProductData();
   }, [productId, products]);
+
+  useEffect(() => {
+    document.documentElement.classList.add("scroll-smooth");
+
+    window.scrollTo(0, 0);
+  }, [productId]);
 
   return productData ? (
     <div className="pt-10 transition-opacity duration-500 ease-in border-t-2 opacity-100">
@@ -42,7 +50,7 @@ const Product = () => {
             ))}
           </div>
           <div className="w-full sm:w-[80%]">
-            <img className="w-full h-auto" src={image} alt="" />
+            <img className="w-full h-auto" src={image} alt="Main product" />
           </div>
         </div>
         {/*----- Product Info -----*/}
@@ -79,12 +87,15 @@ const Product = () => {
               ))}
             </div>
           </div>
-          <button
-            onClick={() => addToCart(productData._id, size)}
-            className="px-8 py-3 text-sm text-white bg-black active:bg-gray-700"
-          >
-            ADD TO CART
-          </button>
+          <div className="flex items-center gap-4">
+            <button
+              onClick={() => addToCart(productData._id, size)}
+              className="px-8 py-3 text-sm text-white bg-black active:bg-gray-700"
+            >
+              ADD TO CART
+            </button>
+          </div>
+
           <hr className="mt-8 sm:w-4/5" />
           <div className="flex flex-col gap-1 mt-5 text-sm text-gray-500">
             <p> 100% Original Product </p>

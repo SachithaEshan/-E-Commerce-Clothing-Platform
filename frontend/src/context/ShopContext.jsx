@@ -2,6 +2,7 @@ import { createContext, useEffect, useState } from "react";
 import { toast } from "react-toastify";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
+import { use } from "react";
 
 export const ShopContext = createContext();
 
@@ -34,9 +35,12 @@ const ShopContextProvider = (props) => {
       cartData[itemId] = {};
       cartData[itemId][size] = 1;
     }
-
     setCartItems(cartData);
   };
+
+  useEffect(() => {
+    console.log(cartItems);
+  }, [cartItems]);
 
   const getCartCount = () => {
     let totalCount = 0;
