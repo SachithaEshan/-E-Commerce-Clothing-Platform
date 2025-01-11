@@ -44,7 +44,7 @@ const Allusers = () => {
               Email
             </th>
             <th scope="col" className="px-6 py-3">
-              Cart Data
+              Cart&nbsp;&nbsp;&nbsp;Items
             </th>
           </tr>
         </thead>
@@ -64,7 +64,26 @@ const Allusers = () => {
                 {doc.email}
               </td>
               <td scope="col" className="px-6 py-3">
-                {JSON.stringify(doc.cartData)}
+                {Object.keys(doc.cartData).map((key) => {
+                  const sizes = doc.cartData[key];
+                  return (
+                    <div key={key} className="mb-2">
+                      {key}
+                      {/* {Object.keys(sizes).map((size) => (
+                        <p key={size}>
+                          <span className="font-semibold">{size}</span>:
+                          {sizes[size]["XS"] ||
+                            sizes[size]["S"] ||
+                            sizes[size]["M"] ||
+                            sizes[size]["L"] ||
+                            sizes[size]["XL"] ||
+                            sizes[size]["XLL"]}
+                          piece(s)
+                        </p>
+                      ))} */}
+                    </div>
+                  );
+                })}
               </td>
             </tr>
           ))}

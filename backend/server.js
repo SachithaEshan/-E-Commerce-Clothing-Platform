@@ -7,12 +7,14 @@ import userRouter from "./routes/userRoute.js";
 import productRouter from "./routes/productRoute.js";
 import reviewRoute from "./routes/reviewRoute.js";
 import router from "./routes/collectionRoute.js";
+import cartRouter from "./routes/cartRoute.js";
+import "dotenv/config";
 
 // config
 const app = express();
 const port = process.env.PORT || 4000;
 connectDB();
-connectCloudinary();
+connectCloudinary()
 
 // middlewares
 app.use(express.json());
@@ -21,7 +23,7 @@ app.use(cors());
 // api endpoints
 app.use("/api/user", userRouter);
 app.use("/api/product", productRouter);
-// app.use("/api/cart", cartRouter);
+app.use("/api/cart", cartRouter)
 app.use("/api/reviews", reviewRoute);
 app.use("/api/collection", router);
 
