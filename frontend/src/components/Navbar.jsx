@@ -7,18 +7,11 @@ const Navbar = () => {
   const [visible, setVisible] = useState(false);
   const {
     setShowSearch,
-<<<<<<< Updated upstream
-=======
-    getCartCount,
->>>>>>> Stashed changes
     navigate,
     setToken,
     token,
     setCartItems,
-<<<<<<< Updated upstream
     getCartCount,
-=======
->>>>>>> Stashed changes
   } = useContext(ShopContext);
 
   const logout = () => {
