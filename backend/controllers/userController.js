@@ -52,28 +52,55 @@ const dataUser = async (req, res) => {
     res.json({ success: false, message: error.message });
   }
 };
-
 const registerUser = async (req, res) => {
   try {
-    const { name, email, password } = req.body;
-
+    const { name, email, password, captchaToken } = req.body;
     const exists = await userModel.findOne({ email });
-    if (exists) {
-      return res.json({ success: false, message: "User already exists" });
+
+    const captchaResponse = await fetch(
+      "https://www.google.com/recaptcha/api/siteverify",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+          secret: process.env.RECAPTCHA_SECRET_KEY,
+          response: captchaToken,
+        }),
+      }
+    );
+
+    const captchaResult = await captchaResponse.json();
+
+    if (!captchaResult.success || captchaResult.score < 0.5) {
+      return res.json({
+        success: false,
+        message: "CAPTCHA validation failed. Please verify you are human.",
+      });
+    } else if (
+      password.length < 8 ||
+      !/[A-Z]/.test(password) ||
+      !/[0-9]/.test(password) ||
+      !/[!@#$%^&*]/.test(password)
+    ) {
+      return res.json({
+        success: false,
+        message:
+          "Password must be at least 8 characters long and include an uppercase letter, a number, and a special character.",
+      });
+    } else if (!/^[a-zA-Z ]+$/.test(name)) {
+      return res.json({
+        success: false,
+        message: "Name must be valid and contain only letters and spaces.",
+      });
+    } else if (exists) {
+      return res.json({ success: false, message: "User already exists." });
+    } else if (!validator.isEmail(email)) {
+      return res.json({
+        success: false,
+        message: "Please enter a valid email.",
+      });
     }
 
-    if (!validator.isEmail(email)) {
-      return res.json({
-        success: false,
-        message: "Please enter a valid email",
-      });
-    }
-    if (password.length < 8) {
-      return res.json({
-        success: false,
-        message: "Please enter a strong password",
-      });
-    }
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(password, salt);
 
@@ -86,22 +113,52 @@ const registerUser = async (req, res) => {
     const user = await newUser.save();
 
     const token = createToken(user._id);
-    res.json({ success: true, token });
+    res.json({ success: true, token, captchaToken });
   } catch (error) {
-    console.log(error);
-    res.json({ success: false, message: error.message });
+    console.error(error);
+    res.json({ success: false, message: "Internal server error." });
   }
 };
 
 const updateUser = async (req, res) => {
   try {
-    const { email, passwords, newpassword } = req.body;
+    const { email, passwords, newpassword, captchaToken } = req.body;
 
     const user = await userModel.findOne({ email });
 
     const isMatch = await bcrypt.compare(passwords, user.password);
 
-    if (isMatch) {
+    const captchaResponse = await fetch(
+      "https://www.google.com/recaptcha/api/siteverify",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+          secret: process.env.RECAPTCHA_SECRET_KEY,
+          response: captchaToken,
+        }),
+      }
+    );
+
+    const captchaResult = await captchaResponse.json();
+
+    if (!captchaResult.success || captchaResult.score < 0.5) {
+      return res.json({
+        success: false,
+        message: "CAPTCHA validation failed. Please verify you are human.",
+      });
+    } else if (
+      newpassword.length < 8 ||
+      !/[A-Z]/.test(newpassword) ||
+      !/[0-9]/.test(newpassword) ||
+      !/[!@#$%^&*]/.test(newpassword)
+    ) {
+      return res.json({
+        success: false,
+        message:
+          "Password must be at least 8 characters long and include an uppercase letter, a number, and a special character.",
+      });
+    } else if (isMatch) {
       const salt = await bcrypt.genSalt(10);
       const hashednewPassword = await bcrypt.hash(newpassword, salt);
 
@@ -125,13 +182,92 @@ const updateUser = async (req, res) => {
   }
 };
 
+const forgotPassword = async (req, res) => {
+  try {
+    const { email, captchaToken } = req.body;
+
+    const captchaResponse = await fetch(
+      "https://www.google.com/recaptcha/api/siteverify",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+          secret: process.env.RECAPTCHA_SECRET_KEY,
+          response: captchaToken,
+        }),
+      }
+    );
+
+    const captchaResult = await captchaResponse.json();
+
+    if (!captchaResult.success || captchaResult.score < 0.5) {
+      return res.json({
+        success: false,
+        message: "CAPTCHA validation failed. Please verify you are human.",
+      });
+    }
+
+    if (!email || !validator.isEmail(email)) {
+      return res.json({ success: false, message: "Invalid email address" });
+    }
+
+    const user = await userModel.findOne({ email });
+
+    if (!user) {
+      return res.json({ success: false, message: "User not found" });
+    }
+
+    // const resetToken = crypto.randomBytes(32).toString("hex");
+    // const resetTokenHash = crypto
+    //   .createHash("sha256")
+    //   .update(resetToken)
+    //   .digest("hex");
+
+    // user.resetPasswordToken = resetTokenHash;
+    // user.resetPasswordExpires = Date.now() + 3600000;
+    // await user.save();
+
+    // const resetURL = `${process.env.FRONTEND_URL}reset-password/${resetToken}`;
+
+    res.json({ success: true, message: "User identified" });
+  } catch (error) {
+    console.error(error);
+    res.json({
+      success: false,
+      message: "Failed to send password reset email",
+    });
+  }
+};
+
 const deleteUser = async (req, res) => {
   try {
-    const email = req.body;
+    const { email, DeleteCaptchaToken } = req.body;
 
-    const result = await userModel.deleteOne({ email: email });
+    if (!email || typeof email !== "string") {
+      return res.json({ success: false, message: "Invalid email provided" });
+    }
 
-    if (result.deletedCount === 0) {
+    const result = await userModel.deleteOne({ email });
+    const captchaResponse = await fetch(
+      "https://www.google.com/recaptcha/api/siteverify",
+      {
+        method: "POST",
+        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+        body: new URLSearchParams({
+          secret: process.env.RECAPTCHA_SECRET_KEY,
+          response: DeleteCaptchaToken,
+        }),
+      }
+    );
+
+    const captchaResult = await captchaResponse.json();
+
+    if (!captchaResult.success || captchaResult.score < 0.5) {
+      return res.json({
+        success: false,
+        message: "CAPTCHA validation failed. Please verify you are human.",
+      });
+    } else if (result.deletedCount === 0) {
       res.json({ success: false, message: "No user found with this email" });
     } else {
       res.json({ success: true, message: "User deleted successfully" });
@@ -145,7 +281,7 @@ const deleteUser = async (req, res) => {
 const allUsers = async (req, res) => {
   try {
     const token = req.body;
-    const documents = await userModel.find(); // Fetch all documents
+    const documents = await userModel.find();
 
     res.json({ success: true, message: "recived", token, documents });
   } catch (error) {
@@ -179,6 +315,7 @@ export {
   adminLogin,
   dataUser,
   updateUser,
+  forgotPassword,
   deleteUser,
   allUsers,
 };
