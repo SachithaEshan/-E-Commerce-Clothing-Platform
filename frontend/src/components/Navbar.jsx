@@ -53,7 +53,7 @@ const Navbar = () => {
           className="w-5 cursor-pointer"
           alt=""
         />
-        <div className="group relative">
+        <div className="relative group">
           <img
             onClick={() => (token ? null : navigate("/login"))}
             className="w-5 cursor-pointer"

@@ -3,7 +3,7 @@ import cart_icon from "./shopping-cart-line.png";
 import search_icon from "./search-line.png";
 // Product Images
 import p_img1_1 from "./p_img1_1.jpeg";
-import p_img1_2 from "./p_img1_2.jpeg";
+import p_img1_2 from "./p_img1_2.jpg";
 import p_img1_3 from "./p_img1_3.jpeg";
 import p_img1_4 from "./p_img1_4.jpg";
 import p_img2_1 from "./p_img2_1.jpeg";
@@ -110,7 +110,7 @@ export const assets = {
 //     image: [p_img3_1],
 //     category: "men",
 //     subCategory: "Topwear",
-//     sizes: ["S", "M", "L"],
+//     sizes: ["S", "M", "L", "XL"],
 //     date: 12343453533221,
 //     bestseller: true,
 //   },
@@ -155,7 +155,7 @@ export const assets = {
 //     image: [p_img6_1, p_img6_2],
 //     category: "men",
 //     subCategory: "Bottomwear",
-//     sizes: ["S", "M", "L"],
+//     sizes: ["S", "M", "L", "XL"],
 //     date: 12343453533221,
 //     bestseller: true,
 //   },
@@ -170,7 +170,7 @@ export const assets = {
 //     image: [p_img7_1, p_img7_2, p_img7_3, p_img7_4],
 //     category: "men",
 //     subCategory: "Bottomwear",
-//     sizes: ["S", "M", "L"],
+//     sizes: ["S", "M", "L", "XL"],
 //     date: 12343453533221,
 //     bestseller: true,
 //   },
@@ -185,7 +185,7 @@ export const assets = {
 //     image: [p_img8_1, p_img8_2, p_img8_3, p_img8_4],
 //     category: "men",
 //     subCategory: "Footwear",
-//     sizes: ["S", "M", "L"],
+//     sizes: ["US 7", "US 8", "US 9", "US 10", "US 11"],
 //     date: 12343453533221,
 //     bestseller: true,
 //   },
@@ -200,7 +200,7 @@ export const assets = {
 //     image: [p_img9_1, p_img9_2, p_img9_3, p_img9_4],
 //     category: "women",
 //     subCategory: "Topwear",
-//     sizes: ["S", "M", "L"],
+//     sizes: ["XS", "S", "M", "L"],
 //     date: 12343453533221,
 //     bestseller: true,
 //   },

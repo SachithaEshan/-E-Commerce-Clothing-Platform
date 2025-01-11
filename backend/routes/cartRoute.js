@@ -4,7 +4,7 @@ import {
   addToCart,
   getUserCart,
   updateCart,
-} from "../controllers/cartControlleer.js"
+} from "../controllers/cartController.js"
 import authUser from "../middleware/auth.js"
 
 const cartRouter = express.Router()
