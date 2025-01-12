@@ -1,21 +1,49 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { assets } from "../assets/assets";
 import axios from "axios";
-import { backendURL } from "../App";
 import { toast } from "react-toastify";
+
 const Add = ({ token }) => {
-  const [image1, setImage1] = useState(false);
-  const [image2, setImage2] = useState(false);
-  const [image3, setImage3] = useState(false);
-  const [image4, setImage4] = useState(false);
+  const [image1, setImage1] = useState(null);
+  const [image2, setImage2] = useState(null);
+  const [image3, setImage3] = useState(null);
+  const [image4, setImage4] = useState(null);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
   const [detailedDescription, setDetailedDescription] = useState("");
   const [price, setPrice] = useState("");
-  const [category, setCategory] = useState("Men");
-  const [subCategory, setSubCategory] = useState("Topwear");
+  const [categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
+  const [selectedCategory, setSelectedCategory] = useState("");
+  const [selectedSubCategory, setSelectedSubCategory] = useState("");
   const [bestSeller, setBestseller] = useState(false);
   const [Sizes, setSizes] = useState([]);
+
+  const backendURL = import.meta.env.VITE_BACKEND_URL;
+
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get(`${backendURL}/api/collection`); // Backend API call to fetch collection data
+
+      // Filter out only valid categories
+      const validCategories = response.data.filter(
+        (item) => item.category && item.category.trim() !== ""
+      );
+      setCategories(validCategories); // Save categories in state
+
+      // Extract all subcategories from the response
+      const subCategoriesList = response.data.flatMap(
+        (item) => item.subCategory || []
+      );
+      setSubCategories(subCategoriesList); // Save subcategories in state
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories(); // Fetch categories and subcategories on mount
+  }, []);
 
   const onSubmitHandler = async (e) => {
     e.preventDefault();
@@ -25,8 +53,8 @@ const Add = ({ token }) => {
       formData.append("description", description);
       formData.append("detailedDescription", detailedDescription);
       formData.append("price", price);
-      formData.append("category", category);
-      formData.append("subCategory", subCategory);
+      formData.append("category", selectedCategory);
+      formData.append("subCategory", selectedSubCategory);
       formData.append("bestSeller", bestSeller);
       formData.append("sizes", JSON.stringify(Sizes));
       image1 && formData.append("image1", image1);
@@ -46,10 +74,10 @@ const Add = ({ token }) => {
         setName("");
         setDescription("");
         setDetailedDescription("");
-        setImage1(false);
-        setImage2(false);
-        setImage3(false);
-        setImage4(false);
+        setImage1(null);
+        setImage2(null);
+        setImage3(null);
+        setImage4(null);
         setPrice("");
         setBestseller(false);
         setSizes([]);
@@ -57,8 +85,10 @@ const Add = ({ token }) => {
         toast.error(response.data.message);
       }
     } catch (error) {
-      console.log(error);
-      toast.error(error.message);
+      console.error("Error:", error);
+      toast.error(
+        error?.message || "An error occurred while submitting the form."
+      );
     }
   };
 
@@ -164,25 +194,37 @@ const Add = ({ token }) => {
       <div className="flex flex-col w-full gap-2 sm:flex-row sm:gap-8">
         <div>
           <p className="mb-2">Product category</p>
+
           <select
-            onChange={(e) => setCategory(e.target.value)}
-            className="w-full px-3 py-2"
+            value={selectedCategory}
+            onChange={(e) => setSelectedCategory(e.target.value)}
+            className="border px-2 py-1"
           >
-            <option value="men">Men</option>
-            <option value="women">Women</option>
-            <option value="kids">Kids</option>
+            <option value="" disabled>
+              Select a category
+            </option>
+            {categories.map((categoryItem) => (
+              <option key={categoryItem._id} value={categoryItem.category}>
+                {categoryItem.category}
+              </option>
+            ))}
           </select>
         </div>
         <div>
-          <p className="mb-2">Sub category</p>
+          <p className="mb-2">Product Sub category</p>
           <select
-            onChange={(e) => setSubCategory(e.target.value)}
-            className="w-full px-3 py-2"
+            value={selectedSubCategory}
+            onChange={(e) => setSelectedSubCategory(e.target.value)}
+            className="border px-2 py-1"
           >
-            <option value="Topwear">Topwear</option>
-            <option value="Bottomwear">Bottomwear</option>
-            <option value="Winterwear">Winterwear</option>
-            <option value="Activewear">Activewear</option>
+            <option value="" disabled>
+              Select a subcategory
+            </option>
+            {subCategories.map((subCategoryItem, index) => (
+              <option key={index} value={subCategoryItem}>
+                {subCategoryItem}
+              </option>
+            ))}
           </select>
         </div>
 
@@ -292,10 +334,7 @@ const Add = ({ token }) => {
       <div className="flex gap-2 mt-2">
         <input
           onChange={() => {
-            setBestseller((prev) => {
-              const newState = !prev;
-              return newState;
-            });
+            setBestseller((prev) => !prev);
           }}
           checked={bestSeller}
           type="checkbox"
