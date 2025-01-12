@@ -2,7 +2,7 @@
 FROM  node:latest AS builder
 
 # Create a directory  and go to the directory 
-WORKDIR /app
+WORKDIR /frontend
 
 # Copy the package.json file to my current directory to install the necessary dependence  
 COPY package.json .
@@ -17,10 +17,10 @@ COPY . .
 RUN npm run build
 
 # Stage-2
-FROM nginx:1.25.2-alpine-slim
+FROM nginx:alpine
 
 # Copy the static file to my Nginx folder to serve static contain
-COPY --from=builder /app/build /usr/share/nginx/html
+COPY --from=builder /frontend/dist /usr/share/nginx/html
 
 # Open the port to react
 EXPOSE 80
