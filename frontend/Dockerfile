@@ -23,7 +23,7 @@ FROM nginx:alpine
 COPY --from=builder /frontend/dist /usr/share/nginx/html
 
 # Open the port to react
-EXPOSE 80
+EXPOSE 5173
 
 # Run nginx in the foreground
 CMD ["nginx", "-g", "daemon off;"]
