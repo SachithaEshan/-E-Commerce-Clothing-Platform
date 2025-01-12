@@ -10,18 +10,20 @@ const Add = ({ token }) => {
   const [image4, setImage4] = useState(false);
   const [name, setName] = useState("");
   const [description, setDescription] = useState("");
+  const [detailedDescription, setDetailedDescription] = useState("");
   const [price, setPrice] = useState("");
   const [category, setCategory] = useState("Men");
   const [subCategory, setSubCategory] = useState("Topwear");
   const [bestSeller, setBestseller] = useState(false);
   const [Sizes, setSizes] = useState([]);
 
-  const onSubmitHanlder = async (e) => {
+  const onSubmitHandler = async (e) => {
     e.preventDefault();
     try {
       const formData = new FormData();
       formData.append("name", name);
       formData.append("description", description);
+      formData.append("detailedDescription", detailedDescription);
       formData.append("price", price);
       formData.append("category", category);
       formData.append("subCategory", subCategory);
@@ -43,6 +45,7 @@ const Add = ({ token }) => {
         toast.success(response.data.message);
         setName("");
         setDescription("");
+        setDetailedDescription("");
         setImage1(false);
         setImage2(false);
         setImage3(false);
@@ -61,8 +64,8 @@ const Add = ({ token }) => {
 
   return (
     <form
-      onSubmit={onSubmitHanlder}
-      className="flex flex-col w-full items-start gap-3"
+      onSubmit={onSubmitHandler}
+      className="flex flex-col items-start w-full gap-3"
     >
       <div>
         <p className="mb-2">Upload Image</p>
@@ -146,16 +149,28 @@ const Add = ({ token }) => {
         />
       </div>
 
-      <div className="flex flex-col sm:flex-row gap-2 w-full sm:gap-8">
+      <div className="w-full">
+        <p className="mb-2">Detailed description</p>
+        <textarea
+          onChange={(e) => setDetailedDescription(e.target.value)}
+          value={detailedDescription}
+          className="w-full max-w-[500px] px-3 py-2"
+          type="text"
+          placeholder="Write detailed content here"
+          required
+        />
+      </div>
+
+      <div className="flex flex-col w-full gap-2 sm:flex-row sm:gap-8">
         <div>
           <p className="mb-2">Product category</p>
           <select
             onChange={(e) => setCategory(e.target.value)}
             className="w-full px-3 py-2"
           >
-            <option value="Men">Men</option>
-            <option value="Women">Women</option>
-            <option value="Kids">Kids</option>
+            <option value="men">Men</option>
+            <option value="women">Women</option>
+            <option value="kids">Kids</option>
           </select>
         </div>
         <div>
@@ -167,6 +182,7 @@ const Add = ({ token }) => {
             <option value="Topwear">Topwear</option>
             <option value="Bottomwear">Bottomwear</option>
             <option value="Winterwear">Winterwear</option>
+            <option value="Activewear">Activewear</option>
           </select>
         </div>
 
@@ -290,7 +306,7 @@ const Add = ({ token }) => {
         </label>
       </div>
 
-      <button type="submit" className="w-28 py-3 mt-4 bg-black text-white">
+      <button type="submit" className="py-3 mt-4 text-white bg-black w-28">
         ADD
       </button>
     </form>

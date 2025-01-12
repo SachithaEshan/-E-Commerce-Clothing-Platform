@@ -3,32 +3,65 @@ import { ShopContext } from "../context/ShopContext";
 import { assets } from "../assets/assets";
 import Title from "../components/Title";
 import ProductItem from "../components/ProductItems";
+import axios from "axios";
 
 const Collection = () => {
   const { products, search, showSearch } = useContext(ShopContext);
   const [showFilter, setShowFilter] = useState(false);
   const [filterProducts, setFilterProducts] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const [subCategories, setSubCategories] = useState([]);
   const [category, setCategory] = useState([]);
   const [subCategory, setSubCategory] = useState([]);
   const [sortType, setSortType] = useState("relevant");
+  const backendURL = import.meta.env.VITE_BACKEND_URL;
+
+  const fetchCategories = async () => {
+    try {
+      const response = await axios.get(`${backendURL}/api/collection`);
+      const validCategories = response.data.filter(
+        (item) => item.category && item.category.trim() !== ""
+      );
+      setCategories(validCategories);
+
+      // Handle subcategories independently, even if categories are empty
+      const subCategoriesList = response.data.flatMap(
+        (item) => item.subCategory || []
+      );
+      setSubCategories(subCategoriesList);
+    } catch (error) {
+      console.error("Error fetching categories:", error);
+    }
+  };
+
+  useEffect(() => {
+    fetchCategories();
+
+    // Polling every 5 seconds
+    const interval = setInterval(() => {
+      fetchCategories();
+    }, 5000);
+
+    return () => clearInterval(interval); // Clean up interval on unmount
+  }, []);
 
   const toggleCategory = (e) => {
-    if (category.includes(e.target.value)) {
-      setCategory((prev) => prev.filter((item) => item !== e.target.value));
-    } else {
-      setCategory((prev) => [...prev, e.target.value]);
-    }
+    setCategory((prev) =>
+      prev.includes(e.target.value)
+        ? prev.filter((item) => item !== e.target.value)
+        : [...prev, e.target.value]
+    );
   };
 
   const toggleSubCategory = (e) => {
-    if (subCategory.includes(e.target.value)) {
-      setSubCategory((prev) => prev.filter((item) => item !== e.target.value));
-    } else {
-      setSubCategory((prev) => [...prev, e.target.value]);
-    }
+    setSubCategory((prev) =>
+      prev.includes(e.target.value)
+        ? prev.filter((item) => item !== e.target.value)
+        : [...prev, e.target.value]
+    );
   };
 
-  const applyFilter = () => {
+  useEffect(() => {
     let productsCopy = products.slice();
 
     if (showSearch && search) {
@@ -49,33 +82,19 @@ const Collection = () => {
       );
     }
 
-    setFilterProducts(productsCopy);
-  };
-
-  const sortProduct = () => {
-    let fpCopy = filterProducts.slice();
-
     switch (sortType) {
       case "low-high":
-        setFilterProducts(fpCopy.sort((a, b) => a.price - b.price));
+        productsCopy.sort((a, b) => a.price - b.price);
         break;
       case "high-low":
-        setFilterProducts(fpCopy.sort((a, b) => b.price - a.price));
+        productsCopy.sort((a, b) => b.price - a.price);
         break;
-
       default:
-        applyFilter();
         break;
     }
-  };
 
-  useEffect(() => {
-    applyFilter();
-  }, [category, subCategory, showSearch, search, products]);
-
-  useEffect(() => {
-    sortProduct();
-  }, [sortType]);
+    setFilterProducts(productsCopy);
+  }, [category, subCategory, showSearch, search, products, sortType]);
 
   return (
     <div className="flex flex-col sm:flex-row gap-1 sm:gap-10 pt-10 border-t">
@@ -92,78 +111,51 @@ const Collection = () => {
             alt=""
           />
         </p>
-        {/* category filter */}
         <div
           className={`border border-gray-300 pl-5 py-3 mt-6 ${
             showFilter ? "" : "hidden"
-          }sm:block`}
+          } sm:block`}
         >
           <p className="mb-3 text-sm font-medium">CATEGORIES</p>
           <div className="flex flex-col gap-2 text-sm font-light text-gray-700">
-            <p className="flex gap-2">
-              <input
-                className="w-3"
-                type="checkbox"
-                value={"men"}
-                onChange={toggleCategory}
-              />
-              Men
-            </p>
-            <p className="flex gap-2">
-              <input
-                className="w-3"
-                type="checkbox"
-                value={"women"}
-                onChange={toggleCategory}
-              />
-              Women
-            </p>
-            <p className="flex gap-2">
-              <input
-                className="w-3"
-                type="checkbox"
-                value={"kids"}
-                onChange={toggleCategory}
-              />
-              Kids
-            </p>
+            {categories.map(
+              (categoryItem) =>
+                categoryItem.category && (
+                  <p key={categoryItem._id} className="flex gap-2">
+                    <input
+                      className="w-3"
+                      type="checkbox"
+                      value={categoryItem.category}
+                      onChange={toggleCategory}
+                    />
+                    {categoryItem.category}
+                  </p>
+                )
+            )}
           </div>
         </div>
-        {/* SubCategeory filter */}
         <div
           className={`border border-gray-300 pl-5 py-3 my-5 ${
             showFilter ? "" : "hidden"
-          }sm:block`}
+          } sm:block`}
         >
-          <p className="mb-3 text-sm font-medium">CATEGORIES</p>
+          <p className="mb-3 text-sm font-medium">SUBCATEGORIES</p>
           <div className="flex flex-col gap-2 text-sm font-light text-gray-700">
-            <p className="flex gap-2">
-              <input
-                className="w-3"
-                type="checkbox"
-                value={"Topwear"}
-                onChange={toggleSubCategory}
-              />
-              Topwear
-            </p>
-            <p className="flex gap-2">
-              <input
-                className="w-3"
-                type="checkbox"
-                value={"Bottomwear"}
-                onChange={toggleSubCategory}
-              />
-              Bottomwear
-            </p>
-            <p className="flex gap-2">
-              <input
-                className="w-3"
-                type="checkbox"
-                value={"Winterwear"}
-                onChange={toggleSubCategory}
-              />
-              Winterwear
-            </p>
+            {subCategories.length > 0 ? (
+              subCategories.map((subCategoryItem, index) => (
+                <p key={index} className="flex gap-2">
+                  <input
+                    className="w-3"
+                    type="checkbox"
+                    value={subCategoryItem}
+                    onChange={toggleSubCategory}
+                  />
+                  {subCategoryItem}
+                </p>
+              ))
+            ) : (
+              <p className="text-gray-500">No subcategories available</p>
+            )}
           </div>
         </div>
       </div>
@@ -172,7 +164,6 @@ const Collection = () => {
       <div className="flex-1">
         <div className="flex justify-between text-base sm:text-2xl mb-4">
           <Title text1={"ALL"} text2={"COLLECTIONS"} />
-          {/* Product Sort*/}
           <select
             onChange={(e) => setSortType(e.target.value)}
             className="border-2 border-gray-300 text-sm px-2"
@@ -183,7 +174,6 @@ const Collection = () => {
           </select>
         </div>
 
-        {/* Map Products */}
         <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 gap-y-6">
           {filterProducts.map((item, index) => (
             <ProductItem

@@ -3,7 +3,6 @@ import axios from "axios";
 import { backendURL } from "../App";
 import { toast } from "react-toastify";
 
-
 const ListCategory = ({ token }) => {
   const [collections, setCollections] = useState([]);
   const [category, setCategory] = useState("");
@@ -25,15 +24,22 @@ const ListCategory = ({ token }) => {
     fetchCollections();
   }, []);
 
-  // Update a category
+  // Update a category or subcategory
   const handleUpdate = async (e) => {
     e.preventDefault();
+
+    // Dynamically build the payload based on provided inputs
+    const updatePayload = {};
+    if (category.trim()) updatePayload.category = category;
+    if (subCategory.trim()) updatePayload.subCategory = subCategory;
+
     try {
       const response = await axios.put(
         `${backendURL}/api/collection/${editId}`,
-        { category, subCategory },
+        updatePayload,
         { headers: { token } }
       );
+
       toast.success(response.data.message);
       fetchCollections();
       setCategory("");
@@ -41,17 +47,21 @@ const ListCategory = ({ token }) => {
       setEditId(null);
     } catch (error) {
       console.error(error);
-      toast.error("Failed to update category");
+      toast.error("Failed to update collection");
     }
   };
 
   // Delete a category
   const handleDelete = async (id) => {
-    if (!window.confirm("Are you sure you want to delete this category?")) return;
+    if (!window.confirm("Are you sure you want to delete this category?"))
+      return;
     try {
-      const response = await axios.delete(`${backendURL}/api/collection/${id}`, {
-        headers: { token },
-      });
+      const response = await axios.delete(
+        `${backendURL}/api/collection/${id}`,
+        {
+          headers: { token },
+        }
+      );
       toast.success(response.data.message);
       fetchCollections();
     } catch (error) {
@@ -62,8 +72,8 @@ const ListCategory = ({ token }) => {
 
   // Populate the form for editing a category
   const handleEdit = (collection) => {
-    setCategory(collection.category);
-    setSubCategory(collection.subCategory);
+    setCategory(collection.category || "");
+    setSubCategory(collection.subCategory || "");
     setEditId(collection._id);
   };
 
@@ -80,8 +90,8 @@ const ListCategory = ({ token }) => {
               type="text"
               value={category}
               onChange={(e) => setCategory(e.target.value)}
-              required
               className="border border-gray-300 p-2 rounded"
+              placeholder="Update category"
             />
           </div>
           <div>
@@ -90,12 +100,15 @@ const ListCategory = ({ token }) => {
               type="text"
               value={subCategory}
               onChange={(e) => setSubCategory(e.target.value)}
-              required
               className="border border-gray-300 p-2 rounded"
+              placeholder="Update subcategory"
             />
           </div>
-          <button type="submit" className="py-2 px-4 bg-blue-500 text-white rounded">
-            Update Category
+          <button
+            type="submit"
+            className="py-2 px-4 bg-blue-500 text-white rounded"
+          >
+            Update Collection
           </button>
         </form>
       )}
@@ -113,8 +126,12 @@ const ListCategory = ({ token }) => {
           {collections.length > 0 ? (
             collections.map((collection) => (
               <tr key={collection._id}>
-                <td className="border border-gray-300 p-2">{collection.category}</td>
-                <td className="border border-gray-300 p-2">{collection.subCategory}</td>
+                <td className="border border-gray-300 p-2">
+                  {collection.category}
+                </td>
+                <td className="border border-gray-300 p-2">
+                  {collection.subCategory}
+                </td>
                 <td className="border border-gray-300 p-2 flex gap-2">
                   <button
                     onClick={() => handleEdit(collection)}
