@@ -24,6 +24,22 @@ const Sidebar = () => {
 
         <NavLink
           className="flex items-center gap-3 border border-gray-300 border-r-0 px-3 py-2 rounded-1"
+          to="/addcategory"
+        >
+          <img className="w-5 h-5" src={assets.add_icon} alt="" />
+          <p className="hidden md:block">Add Categories</p>
+        </NavLink>
+
+        <NavLink
+          className="flex items-center gap-3 border border-gray-300 border-r-0 px-3 py-2 rounded-1"
+          to="/listcategory"
+        >
+          <img className="w-5 h-5" src={assets.order_icon} alt="" />
+          <p className="hidden md:block">List Categories</p>
+        </NavLink>
+
+        <NavLink
+          className="flex items-center gap-3 border border-gray-300 border-r-0 px-3 py-2 rounded-1"
           to="/orders"
         >
           <img className="w-5 h-5" src={assets.order_icon} alt="" />
