@@ -41,27 +41,32 @@ const PlaceOrder = () => {
       key: import.meta.env.VITE.RAZORPAY_KEY_ID,
       amount: order.amount,
       currency: order.currency,
-      description: 'Order Payment',
+      description: "Order Payment",
       order_id: order.id,
       receipt: order.receipt,
-      handler: async(response) =>{
-        console.log(response)
+      handler: async (response) => {
+        console.log(response);
         try {
-          const {data} = await axios.post(backendURL + '/api/order/verifyRazorpay',response,{headers:{token}})
+          const { data } = await axios.post(
+            backendURL + "/api/order/verifyRazorpay",
+            response,
+            { headers: { token } }
+          );
           if (data.success) {
-            navigate('/orders')
-            setCartItems({})
+            navigate("/orders");
+            setCartItems({});
+          } else {
+            console.log(response.data);
           }
         } catch (error) {
-            console.log(error)
-            toast.error(error)
+          console.log(error);
+          toast.error(error);
         }
-      }
-
-    }
-    const rzp = new window.razorpay(options)
-    rzp.open()
-  }
+      },
+    };
+    const rzp = new window.razorpay(options);
+    rzp.open();
+  };
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
@@ -103,28 +108,36 @@ const PlaceOrder = () => {
           }
           break;
 
-          case 'stripe':
+        case "stripe":
+          const responseStripe = await axios.post(
+            backendURL + "/api/order/stripe",
+            orderData,
+            { headers: { token } }
+          );
+          if (responseStripe.data.success) {
+            const { session_url } = responseStripe.data;
+            window.location.replace(session_url);
+          } else {
+            toast.error(responseStripe.data.message);
+          }
+          break;
 
-            const responseStripe = await axios.post(backendURL + '/api/order/stripe',orderData,{headers:{token}})
-            if (responseStripe.data.success) {
-              const {session_url} = responseStripe.data
-              window.location.replace(session_url)
-            }else{
-              toast.error(responseStripe.data.message)
-            }
-            break;
+        case "razorpay":
+          const responseRazorpay = await axios.post(
+            backendURL + "/api/order/razorpay",
+            orderData,
+            { headers: { token } }
+          );
+          if (responseRazorpay.data.success) {
+            initPay(responseRazorpay.data.order);
+          } else {
+            toast.warn(responseRazorpay.data.message);
+            toast.info("Try another payment method");
+          }
 
-            case 'razorpay':
+          break;
 
-              const responseRazorpay = await axios.post(backendURL + '/api/order/razorpay'.orderData,{headers:{token}})
-              if (responseRazorpay.data.success) {
-                initPay(responseRazorpay.data.order)
-              }
-
-
-            break;
-
-``    
+          ``;
 
         default:
           break;
@@ -134,7 +147,6 @@ const PlaceOrder = () => {
       toast.error(error.message);
     }
   };
-
 
   return (
     <form
@@ -150,38 +162,38 @@ const PlaceOrder = () => {
         <div className="space-y-4 text-left">
           <div className="flex gap-3">
             <input
-            required
-            onChange={onChangeHandler}
-            name="firstName"
-            value={formData.firstName}
+              required
+              onChange={onChangeHandler}
+              name="firstName"
+              value={formData.firstName}
               className="border border-gray-300 rounded px-4 py-2 h-10 w-full text-sm"
               type="text"
               placeholder="First name"
             />
             <input
-            required
-            onChange={onChangeHandler}
-            name="lastName"
-            value={formData.lastName}
+              required
+              onChange={onChangeHandler}
+              name="lastName"
+              value={formData.lastName}
               className="border border-gray-300 rounded px-4 py-2 h-10 w-full text-sm"
               type="text"
               placeholder="Last name"
             />
           </div>
           <input
-          required
-          onChange={onChangeHandler}
-          name="email"
-          value={formData.email}
+            required
+            onChange={onChangeHandler}
+            name="email"
+            value={formData.email}
             className="border border-gray-300 rounded px-4 py-2 h-10 w-full text-sm"
             type="email"
             placeholder="Email address"
           />
           <input
-           required
-           onChange={onChangeHandler}
-           name="street"
-           value={formData.street}
+            required
+            onChange={onChangeHandler}
+            name="street"
+            value={formData.street}
             className="border border-gray-300 rounded px-4 py-2 h-10 w-full text-sm"
             type="text"
             placeholder="Street"
@@ -197,10 +209,10 @@ const PlaceOrder = () => {
               placeholder="City"
             />
             <input
-            required
-            onChange={onChangeHandler}
-            name="state"
-            value={formData.state}
+              required
+              onChange={onChangeHandler}
+              name="state"
+              value={formData.state}
               className="border border-gray-300 rounded px-4 py-2 h-10 w-full text-sm"
               type="text"
               placeholder="State"
@@ -208,29 +220,29 @@ const PlaceOrder = () => {
           </div>
           <div className="flex gap-3">
             <input
-            required
-            onChange={onChangeHandler}
-            name="zipcode"
-            value={formData.zipcode}
+              required
+              onChange={onChangeHandler}
+              name="zipcode"
+              value={formData.zipcode}
               className="border border-gray-300 rounded px-4 py-2 h-10 w-full text-sm"
               type="number"
               placeholder="Zipcode"
             />
             <input
-            required
-            onChange={onChangeHandler}
-            name="country"
-            value={formData.country}
+              required
+              onChange={onChangeHandler}
+              name="country"
+              value={formData.country}
               className="border border-gray-300 rounded px-4 py-2 h-10 w-full text-sm"
               type="text"
               placeholder="Country"
             />
           </div>
           <input
-           required
-           onChange={onChangeHandler}
-           name="phone"
-           value={formData.phone}
+            required
+            onChange={onChangeHandler}
+            name="phone"
+            value={formData.phone}
             className="border border-gray-300 rounded px-4 py-2 h-10 w-full text-sm"
             type="number"
             placeholder="Phone"
@@ -301,14 +313,14 @@ const PlaceOrder = () => {
 
         <div className="w-full text-end mt-8">
           <button
-             type="submit"
+            type="submit"
             className="bg-black text-white px-16 py-3 text-sm"
           >
             PLACE ORDER
           </button>
         </div>
       </div>
-      </form>
+    </form>
   );
 };
 
