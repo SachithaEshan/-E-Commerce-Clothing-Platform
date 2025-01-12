@@ -1,13 +1,10 @@
-# The name of the workflow.
 name: Build and Deploy
 
-# Run the workflow when code is pushed to the main branch
 on:
   push:
     branches:
       - main
 
-# This is the workflow that is being run.
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -19,23 +16,19 @@ jobs:
 
       - name: Checkout code
         uses: actions/checkout@v2
-      # Rest of the steps
 
-      # Install dependencies and run tests for the client application
       - name: Install and Test Frontend
         working-directory: ./frontend
         run: |
           npm install
           npm run test
 
-      # Install dependencies, export environment variables to be used by application and run tests for the server application
       - name: Install and Test Backend
         working-directory: ./backend
         run: |
           npm install
           npm run test
 
-      # Install dependencies and run tests for the admin application
       - name: Install and Test Admin
         working-directory: ./admin
         run: |
@@ -43,19 +36,19 @@ jobs:
           npm run test
 
       - name: Build Frontend Docker Image
-        working-directory:
-          ./frontend
-          # Build image with tag rakeshpotnuru/productivity-app:client
+        working-directory: ./frontend
         run: |
           docker build -t tolawes831/sportswear:frontend-${{github.run_number}} .
 
-      # Build a Docker image for the server application
       - name: Build Backend Docker Image
-        working-directory:
-          ./backend
-          # Build image with tag rakeshpotnuru/productivity-app:server
+        working-directory: ./backend
         run: |
           docker build -t tolawes831/sportswear:backend-${{github.run_number}} .
+
+      - name: Build Admin Docker Image
+        working-directory: ./admin
+        run: |
+          docker build -t tolawes831/sportswear:admin-${{github.run_number}} .
 
       - name: Login to Docker Hub
         uses: docker/login-action@v1
@@ -63,8 +56,8 @@ jobs:
           username: tolawes831
           password: am7y-Q::Pq36y22
 
-        # Push the Docker images to Docker Hub
       - name: Push Docker Images to Docker Hub
         run: |
           docker push tolawes831/sportswear:frontend-${{github.run_number}}
           docker push tolawes831/sportswear:backend-${{github.run_number}}
+          docker push tolawes831/sportswear:admin-${{github.run_number}}
