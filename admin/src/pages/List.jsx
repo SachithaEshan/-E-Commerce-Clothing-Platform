@@ -4,8 +4,10 @@ import axios from "axios";
 import { toast } from "react-toastify";
 import { assets } from "../assets/assets";
 
-const List = ({ token }) => {
+const List = () => {
   const [list, setList] = useState([]);
+  const token = localStorage.getItem("token");
+
   const fetchList = async () => {
     try {
       const response = await axios.get(backendURL + "/api/product/list");

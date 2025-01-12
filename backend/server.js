@@ -7,6 +7,7 @@ import userRouter from "./routes/userRoute.js";
 import productRouter from "./routes/productRoute.js";
 import reviewRoute from "./routes/reviewRoute.js";
 import "dotenv/config";
+import orderRouter from "./routes/orderRoutes.js";
 
 // config
 const app = express();
@@ -23,6 +24,7 @@ app.use("/api/user", userRouter);
 app.use("/api/product", productRouter);
 // app.use("/api/cart", cartRouter);
 app.use("/api/reviews", reviewRoute);
+app.use("/api/order", orderRouter);
 
 app.get("/", (req, res) => {
   res.send("API WORKING");

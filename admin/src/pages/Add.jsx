@@ -3,7 +3,8 @@ import { assets } from "../assets/assets";
 import axios from "axios";
 import { backendURL } from "../App";
 import { toast } from "react-toastify";
-const Add = ({ token }) => {
+const Add = () => {
+  const token = localStorage.getItem("token");
   const [image1, setImage1] = useState(false);
   const [image2, setImage2] = useState(false);
   const [image3, setImage3] = useState(false);
