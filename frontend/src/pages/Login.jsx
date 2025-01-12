@@ -2,6 +2,7 @@ import React, { useContext, useEffect, useState } from "react";
 import { ShopContext } from "../context/ShopContext";
 import axios from "axios";
 import { toast } from "react-toastify";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const Login = () => {
   const [currentState, setCurrentState] = useState("Login");
@@ -10,15 +11,23 @@ const Login = () => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const [email, setEmail] = useState("");
+  const recaptchaSiteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+  const [captchaToken, setCaptchaToken] = useState("");
 
   const onSubmitHandler = async (event) => {
     event.preventDefault();
     try {
+      if (!captchaToken) {
+        toast.error("Please complete the CAPTCHA to proceed.");
+        return;
+      }
+
       if (currentState === "Sign Up") {
         const response = await axios.post(backendURL + "/api/user/register", {
           name,
           email,
           password,
+          captchaToken,
         });
         if (response.data.success) {
           setToken(response.data.token);
@@ -26,15 +35,16 @@ const Login = () => {
           localStorage.setItem("email", email);
           localStorage.setItem("psw", password);
 
-          toast.success("Welcome Mr/Mrs/Miss" + name + " !");
-          toast.success("Your are successfully registered!");
+          toast.success("Welcome " + name + " !");
+          toast.success("You are successfully registered!");
         } else {
           toast.error(response.data.message);
         }
-      } else {
+      } else if (currentState === "Login") {
         const response = await axios.post(backendURL + "/api/user/login", {
           email,
           password,
+          captchaToken,
         });
         if (response.data.success) {
           setToken(response.data.token);
@@ -43,6 +53,21 @@ const Login = () => {
           localStorage.setItem("psw", password);
 
           toast.success("Welcome Back Again!");
+        } else {
+          toast.error(response.data.message);
+        }
+      } else if (currentState === "Forgot Password") {
+        const response = await axios.post(
+          backendURL + "/api/user/forgot-password",
+          {
+            email,
+            captchaToken,
+          }
+        );
+        if (response.data.success) {
+          toast.info("User was successfully identified.");
+          toast.warn("But not SMTP servers are supported for free anymore.");
+          toast.info("Can't reset password in this time");
         } else {
           toast.error(response.data.message);
         }
@@ -86,34 +111,59 @@ const Login = () => {
         placeholder="Email"
         required
       />
-      <input
-        onChange={(e) => setPassword(e.target.value)}
-        value={password}
-        type="password"
-        className="w-full px-3 py-2 border border-gray-800"
-        placeholder="Password"
-        required
-      />
+      {currentState !== "Forgot Password" && (
+        <input
+          onChange={(e) => setPassword(e.target.value)}
+          value={password}
+          type="password"
+          className="w-full px-3 py-2 border border-gray-800"
+          placeholder="Password"
+          required
+        />
+      )}
       <div className="w-full flex justify-between text-sm mt-2">
-        <p className="cursor-pointer">Forgot your password?</p>
         {currentState === "Login" ? (
-          <p
-            onClick={() => setCurrentState("Sign Up")}
-            className="cursor-pointer"
-          >
-            Create account
-          </p>
-        ) : (
+          <>
+            <p
+              onClick={() => setCurrentState("Forgot Password")}
+              className="cursor-pointer"
+            >
+              Forgot your password?
+            </p>
+            <p
+              onClick={() => setCurrentState("Sign Up")}
+              className="cursor-pointer"
+            >
+              Create account
+            </p>
+          </>
+        ) : currentState === "Sign Up" ? (
           <p
             onClick={() => setCurrentState("Login")}
             className="cursor-pointer"
           >
             Login Here
           </p>
+        ) : (
+          <p
+            onClick={() => setCurrentState("Login")}
+            className="cursor-pointer"
+          >
+            Back to Login
+          </p>
         )}
       </div>
+      <ReCAPTCHA
+        sitekey={recaptchaSiteKey}
+        onChange={(token) => setCaptchaToken(token)}
+        onExpired={() => setCaptchaToken("")}
+      />
       <button className="bg-black text-white font-light px-8 py-2 mt-4">
-        {currentState === "Login" ? "Sign In" : "Sign Up"}
+        {currentState === "Login"
+          ? "Sign In"
+          : currentState === "Sign Up"
+          ? "Sign Up"
+          : "Reset Password"}
       </button>
     </form>
   );

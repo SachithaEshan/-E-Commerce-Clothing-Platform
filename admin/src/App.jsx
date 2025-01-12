@@ -10,7 +10,9 @@ import Allusers from "./pages/Allusers";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/ReactToastify.css";
 
-export const backendURL = import.meta.env.VITE_BACKEND_URL;
+import AddCategory from "./pages/Addcategory";
+import ListCategory from "./pages/ListCategory";
+
 export const currency = "$";
 
 const App = () => {
@@ -37,12 +39,27 @@ const App = () => {
             <Sidebar />
             <div className="w-[70%] mx-auto ml-[max(5vw,25px)] my-8 text-gray-600 text-base">
               <Routes>
-              <Route path="/add" element={<Add />} />
-                <Route path="/list" element={<List />} />
-                <Route path="/orders" element={<Orders />} />
-                <Route path="/allusers" element={<Allusers />} />
-                <Route path="/" element={<Navigate to="/orders" />} />
-                
+  
+            
+                <Route path="/add" element={<Add setToken={setToken} />} />
+                <Route path="/list" element={<List setToken={setToken} />} />
+                <Route
+                  path="/addcategory"
+                  element={<AddCategory setToken={setToken} />}
+                />
+                <Route
+                  path="/listcategory"
+                  element={<ListCategory setToken={setToken} />}
+                />
+                <Route
+                  path="/orders"
+                  element={<Orders setToken={setToken} />}
+                />
+                <Route
+                  path="/allusers"
+                  element={<Allusers setToken={setToken} />}
+                />
+
               </Routes>
             </div>
           </div>

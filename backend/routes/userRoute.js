@@ -8,6 +8,7 @@ import {
   updateUser,
   deleteUser,
   allUsers,
+  forgotPassword,
 } from "../controllers/userController.js";
 
 const userRouter = express.Router();
@@ -17,6 +18,7 @@ userRouter.post("/login", loginUser);
 userRouter.post("/admin", adminLogin);
 userRouter.post("/data", dataUser);
 userRouter.post("/updateuser", updateUser);
+userRouter.post("/forgot-password", forgotPassword);
 userRouter.post("/deleteuser", deleteUser);
 userRouter.post("/allusers", allUsers);
 
