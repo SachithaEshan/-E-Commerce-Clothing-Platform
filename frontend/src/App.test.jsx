@@ -4,12 +4,8 @@ import { BrowserRouter } from "react-router-dom";
 import ShopContextProvider from "./context/ShopContext.jsx";
 import App from "./App";
 
-test("demo", () => {
-  expect(true).toBe(true);
-});
-
-describe("render", () => {
-  it("renders the main page", () => {
+describe("Render", () => {
+  test("renders the main page", () => {
     render(
       <BrowserRouter>
         <ShopContextProvider>
