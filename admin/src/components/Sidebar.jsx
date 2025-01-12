@@ -50,7 +50,7 @@ const Sidebar = () => {
           to="/allusers"
         >
           <img className="w-5 h-5" src={assets.allusers_icon} alt="" />
-          <p className="hidden md:block">All Users</p>
+          <p className="hidden md:block">User Accounts List</p>
         </NavLink>
       </div>
     </div>
