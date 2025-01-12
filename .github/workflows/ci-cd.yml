@@ -57,11 +57,11 @@ jobs:
         run: |
           docker build -t tolawes831/sportswear:backend-${{github.run_number}} .
 
-          - name: Login to Docker Hub
-          uses: docker/login-action@v1
-          with:
-            username: tolawes831
-            password: am7y-Q::Pq36y22
+      - name: Login to Docker Hub
+        uses: docker/login-action@v1
+        with:
+          username: tolawes831
+          password: am7y-Q::Pq36y22
 
         # Push the Docker images to Docker Hub
       - name: Push Docker Images to Docker Hub

@@ -1,29 +1,13 @@
-# Stage-1 & specify a name 'builder'
 FROM  node:latest AS builder
-
-# Create a directory  and go to the directory 
+ 
 WORKDIR /frontend
-
-# Copy the package.json file to my current directory to install the necessary dependence  
+ 
 COPY package.json .
 
-# Install the dependence
 RUN npm install
 
-# Copy other files to my current directory
 COPY . .
 
-# Build and optimize static file
-RUN npm run build
-
-# Stage-2
-FROM nginx:alpine
-
-# Copy the static file to my Nginx folder to serve static contain
-COPY --from=builder /frontend/dist /usr/share/nginx/html
-
-# Open the port to react
 EXPOSE 5173
 
-# Run nginx in the foreground
-CMD ["nginx", "-g", "daemon off;"]
+CMD ["npm", "run", "dev"]
