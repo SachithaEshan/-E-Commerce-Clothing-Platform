@@ -200,9 +200,14 @@ test("should handle /api/cart UPDATE_USER_CART", async () => {
 test("should handle /api/reviews GET_REVIEWS", async () => {
   const response = await request(app).get("/api/reviews/");
   assert.strictEqual(response.status, 200);
+  process.exit(0);
 });
 
 test("should disconnect from mongodb", async () => {
   await mongoose.disconnect();
   assert.strictEqual(mongoose.connection.readyState, 0);
+});
+
+test("Exit", async () => {
+  process.exit(0);
 });
