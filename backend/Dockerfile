@@ -8,7 +8,7 @@ WORKDIR /backend
 COPY package.json .
 
 # Install the dependence
-RUN npm install
+RUN npm install -g nodemon
 
 # Copy other files to my current directory
 COPY . .
