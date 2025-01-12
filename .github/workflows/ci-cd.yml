@@ -7,13 +7,6 @@ on:
     branches:
       - main
 
-# Set environment variables
-# env:
-#   MONGODB_URI: ${{ secrets.MONGODB_URI }}
-#   TOKEN_KEY: ${{ secrets.TOKEN_KEY }}
-#   EMAIL: ${{ secrets.EMAIL }}
-#   PASSWORD: ${{ secrets.PASSWORD }}
-
 # This is the workflow that is being run.
 jobs:
   build-and-deploy:
@@ -40,10 +33,6 @@ jobs:
         working-directory: ./backend
         run: |
           npm install
-          # export MONGODB_URI=$MONGODB_URI
-          # export TOKEN_KEY=$TOKEN_KEY
-          # export EMAIL=$EMAIL
-          # export PASSWORD=$PASSWORD
           npm run test
 
       # Install dependencies and run tests for the admin application
