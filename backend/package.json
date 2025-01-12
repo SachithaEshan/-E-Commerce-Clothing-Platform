@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "start": "node server.js",
-    "test": "npx jest tests/server.test.js",
+    "test": "jest",
     "server": "nodemon server.js"
   },
   "author": "",
