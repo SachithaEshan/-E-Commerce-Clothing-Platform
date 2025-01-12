@@ -1,0 +1,10 @@
+{
+  "presets": [
+    [
+      "@babel/preset-env",
+      {
+        "targets": "node 20" // You can change this to match the version of Node.js you're using
+      }
+    ]
+  ]
+}

@@ -126,6 +126,10 @@ const updateUser = async (req, res) => {
 
     const user = await userModel.findOne({ email });
 
+    if (!user) {
+      return res.json({ success: false, message: "User not found" });
+    }
+
     const isMatch = await bcrypt.compare(passwords, user.password);
 
     const captchaResponse = await fetch(

@@ -35,7 +35,7 @@ const Login = () => {
           localStorage.setItem("email", email);
           localStorage.setItem("psw", password);
 
-          toast.success("Welcome Mr/Mrs/Miss " + name + " !");
+          toast.success("Welcome " + name + " !");
           toast.success("You are successfully registered!");
         } else {
           toast.error(response.data.message);
