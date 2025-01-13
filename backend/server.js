@@ -11,13 +11,11 @@ import router from "./routes/collectionRoute.js";
 import cartRouter from "./routes/cartRoute.js";
 import wishlistRouter from "./routes/wishlistRoute.js";
 
-// config
 const app = express();
 const port = process.env.PORT || 4000;
 connectDB();
 connectCloudinary();
 
-// middlewares
 app.use(express.json());
 app.use(cors());
 
@@ -36,4 +34,11 @@ app.get("/", (req, res) => {
 
 app.listen(port, () => console.log("Server started on PORT : " + port));
 
+process.on("SIGINT", () => {
+  console.log("Gracefully shutting down...");
+  server.close(() => {
+    console.log("Closed out remaining connections.");
+    process.exit(0);
+  });
+});
 export default app;

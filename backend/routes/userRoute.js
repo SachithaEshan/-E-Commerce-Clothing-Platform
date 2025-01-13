@@ -20,9 +20,9 @@ userRouter.post("/register", registerUser);
 userRouter.post("/login", loginUser);
 userRouter.post("/admin", adminLogin);
 userRouter.post("/data", authUser, dataUser);
-userRouter.post("/updateuser", authUser, updateUser);
-userRouter.post("/forgot-password", authUser, forgotPassword);
-userRouter.post("/deleteuser", authUser, deleteUser);
+userRouter.put("/updateuser", authUser, updateUser);
+userRouter.get("/forgot-password", forgotPassword);
+userRouter.delete("/deleteuser", authUser, deleteUser);
 userRouter.post("/allusers", adminAuth, allUsers);
 
 export default userRouter;
