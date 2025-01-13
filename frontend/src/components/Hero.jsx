@@ -1,26 +1,21 @@
 import React from "react";
 import { assets } from "../assets/assets";
+import { useNavigate } from "react-router-dom";
 
 const Hero = () => {
+  const navigate = useNavigate();
   return (
     <div className="flex flex-col sm:flex-row border border-gray-400">
-      {/* <div className="w-full sm:w-1/2 flex items-center justify-center py-10 sm:py-0">
-        <div className="text-[#414141]">
-          <div className="flex items-center gap-2">
-            <p className="w-8 md:w-11 h-[2px] bg-[#414141]"></p>
-            <p className="font-medium text-sm md:text-base">OUR BEST SELLERS</p>
-          </div>
-          <h1 className="text-3xl sm:py-3 lg:text-5xl leading-relaxed">
-            Latest Arrivals
-          </h1>
-          <div className="flex items-center gap-2">
-            <p className="font-semibold text-sm md:text-base">SHOP NOW</p>
-            <p className="w-8 md:w-11 h-[1px] bg-[#414141]"></p>
-          </div>
-        </div>
-      </div> */}
-
       <img className="w-full sm:w-full" src={assets.hero_img} alt="" />
+
+      <div className="relative flex flex-col ">
+        <button
+          className="absolute right-1/2 transform -translate-x-[80%] translate-y-[-40px] bottom-40 bg-black text-white text-sm sm:text-base py-2 px-4 rounded hover:bg-gray-800 transition whitespace-nowrap w-64"
+          onClick={() => navigate("/collection")}
+        >
+          Shop Now
+        </button>
+      </div>
     </div>
   );
 };
