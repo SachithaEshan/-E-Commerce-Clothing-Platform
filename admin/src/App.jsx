@@ -14,11 +14,10 @@ import AddCategory from "./pages/Addcategory";
 import ListCategory from "./pages/ListCategory";
 
 export const currency = "$";
+export const backendURL = import.meta.env.VITE_BACKEND_URL;
 
 const App = () => {
-  const [token, setToken] = useState(
-    localStorage.getItem("token") ? localStorage.getItem("token") : ""
-  );
+  const [token, setToken] = useState(localStorage.getItem("token"));
 
   useEffect(() => {
     if (token) {
@@ -39,8 +38,6 @@ const App = () => {
             <Sidebar />
             <div className="w-[70%] mx-auto ml-[max(5vw,25px)] my-8 text-gray-600 text-base">
               <Routes>
-  
-            
                 <Route path="/add" element={<Add setToken={setToken} />} />
                 <Route path="/list" element={<List setToken={setToken} />} />
                 <Route
@@ -59,7 +56,6 @@ const App = () => {
                   path="/allusers"
                   element={<Allusers setToken={setToken} />}
                 />
-
               </Routes>
             </div>
           </div>

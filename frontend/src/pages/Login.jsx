@@ -23,12 +23,16 @@ const Login = () => {
       }
 
       if (currentState === "Sign Up") {
-        const response = await axios.post(backendURL + "/api/user/register", {
-          name,
-          email,
-          password,
-          captchaToken,
-        });
+        const response = await axios.post(
+          backendURL + "/api/user/register",
+          {
+            name,
+            email,
+            password,
+            captchaToken,
+          },
+          { headers: { token } }
+        );
         if (response.data.success) {
           setToken(response.data.token);
           localStorage.setItem("token", response.data.token);
@@ -41,18 +45,22 @@ const Login = () => {
           toast.error(response.data.message);
         }
       } else if (currentState === "Login") {
-        const response = await axios.post(backendURL + "/api/user/login", {
-          email,
-          password,
-          captchaToken,
-        });
+        const response = await axios.post(
+          backendURL + "/api/user/login",
+          {
+            email,
+            password,
+            captchaToken,
+          },
+          { headers: { token } }
+        );
         if (response.data.success) {
           setToken(response.data.token);
           localStorage.setItem("token", response.data.token);
           localStorage.setItem("email", email);
           localStorage.setItem("psw", password);
 
-          toast.success("Welcome Back Again!");
+          toast.success("Welcome Back!");
         } else {
           toast.error(response.data.message);
         }

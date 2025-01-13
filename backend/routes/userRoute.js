@@ -11,15 +11,18 @@ import {
   forgotPassword,
 } from "../controllers/userController.js";
 
+import authUser from "../middleware/auth.js";
+import adminAuth from "../middleware/adminAuth.js";
+
 const userRouter = express.Router();
 
 userRouter.post("/register", registerUser);
 userRouter.post("/login", loginUser);
 userRouter.post("/admin", adminLogin);
-userRouter.post("/data", dataUser);
-userRouter.post("/updateuser", updateUser);
-userRouter.post("/forgot-password", forgotPassword);
-userRouter.post("/deleteuser", deleteUser);
-userRouter.post("/allusers", allUsers);
+userRouter.post("/data", authUser, dataUser);
+userRouter.post("/updateuser", authUser, updateUser);
+userRouter.post("/forgot-password", authUser, forgotPassword);
+userRouter.post("/deleteuser", authUser, deleteUser);
+userRouter.post("/allusers", adminAuth, allUsers);
 
 export default userRouter;

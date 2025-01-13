@@ -28,9 +28,26 @@ const Orders = () => {
       toast.error(error.message);
     }
   };
+
+  const statusHandler = async (event, orderId) => {
+    try {
+      const response = await axios.post(
+        backendURL + "/api/order/status",
+        { orderId, status: event.target.value },
+        { headers: { token } }
+      );
+      if (response.data.success) {
+        await fetchAllOrders();
+      }
+    } catch (error) {
+      console.log(error);
+      toast.error(response.data.message);
+    }
+  };
   useEffect(() => {
     fetchAllOrders();
   }, [token]);
+
   return (
     <div>
       <h3>Order Page</h3>
@@ -46,14 +63,14 @@ const Orders = () => {
                 {order.items.map((item, index) => {
                   if (index === order.items.length - 1) {
                     return (
-                      <p key={index}>
+                      <p className="py-0.5" key={index}>
                         {" "}
                         {item.name} x {item.quantity} <span> {item.size} </span>
                       </p>
                     );
                   } else {
                     return (
-                      <p key={index}>
+                      <p className="py-0.5" key={index}>
                         {" "}
                         {item.name} x {item.quantity} <span> {item.size} </span>
                       </p>
@@ -61,7 +78,9 @@ const Orders = () => {
                   }
                 })}
               </div>
-              <p>{order.address.firstName + " " + order.address.lastName}</p>
+              <p className="mt-3 mb-2 font-semibold">
+                {order.address.firstName + " " + order.address.lastName}
+              </p>
               <div>
                 <p>{order.address.street + ", "}</p>
                 <p>
@@ -77,16 +96,22 @@ const Orders = () => {
               <p>{order.address.phone}</p>
             </div>
             <div>
-              <p>Items: {order.items.length}</p>
-              <p>Method: {order.paymentMethod}</p>
+              <p className="text-sm sm:text-[15px]">
+                Items: {order.items.length}
+              </p>
+              <p className="mt-3">Method: {order.paymentMethod}</p>
               <p>Payment: {order.payment ? "Done" : "Pending"}</p>
               <p>Date: {new Date(order.date).toLocaleDateString()}</p>
             </div>
-            <p>
+            <p className="text-sm sm:text-[15px]">
               {currency}
               {order.amount}
             </p>
-            <select>
+            <select
+              onChange={(event) => statusHandler(event, order._id)}
+              value={order.status}
+              className="p-2 font-semibold"
+            >
               <option value="Order Placed">Order Placed</option>
               <option value="Packing">Packing</option>
               <option value="Shipped">Shipped</option>
