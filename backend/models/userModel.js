@@ -8,6 +8,12 @@ const userSchema = new mongoose.Schema(
     resetPasswordToken: { type: String, default: null }, // Store hashed token here
     resetPasswordExpires: { type: Date, default: null },
     cartData: { type: Object, default: {} },
+    wishlist: [
+      {
+      productId: { type: mongoose.Schema.Types.ObjectId, ref: "product" },
+      addedAt: { type: Date, default: Date.now },
+      },
+    ],
   },
   { minimize: false }
 );

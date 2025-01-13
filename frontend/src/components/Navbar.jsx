@@ -2,6 +2,7 @@ import React, { useState, useContext } from "react";
 import { assets } from "../assets/assets";
 import { Link, NavLink } from "react-router-dom";
 import { ShopContext } from "../context/ShopContext";
+import { FaHeart, FaRegHeart } from "react-icons/fa";
 
 const Navbar = () => {
   const [visible, setVisible] = useState(false);
@@ -55,7 +56,12 @@ const Navbar = () => {
           src={assets.search_icon}
           className="w-5 cursor-pointer"
         />
-
+        {token && (
+          <FaRegHeart
+            onClick={() => navigate("/wishlist")}
+            className="w-5 cursor-pointer"
+          />
+        )}
         <div className="relative group">
           <img
             onClick={() => (token ? null : navigate("/login"))}
