@@ -4,6 +4,7 @@ import { ShopContext } from "../context/ShopContext";
 import { assets } from "../assets/assets.js";
 import RelatedProducts from "../components/RelatedProducts.jsx";
 import Review from "../components/Review.jsx";
+import WishlistButton from "../components/WishlistButton.jsx";
 
 const Product = () => {
   const { productId } = useParams();
@@ -94,6 +95,10 @@ const Product = () => {
             >
               ADD TO CART
             </button>
+            <WishlistButton
+              productId={productData._id}
+              isInitiallyInWishlist={false}
+            />
           </div>
 
           <hr className="mt-8 sm:w-4/5" />
