@@ -23,16 +23,13 @@ const Login = () => {
       }
 
       if (currentState === "Sign Up") {
-        const response = await axios.post(
-          backendURL + "/api/user/register",
-          {
-            name,
-            email,
-            password,
-            captchaToken,
-          },
-          { headers: { token } }
-        );
+        const response = await axios.post(`${backendURL}/api/user/register`, {
+          name,
+          email,
+          password,
+          captchaToken,
+          headers: { token },
+        });
         if (response.data.success) {
           setToken(response.data.token);
           localStorage.setItem("token", response.data.token);
@@ -45,15 +42,13 @@ const Login = () => {
           toast.error(response.data.message);
         }
       } else if (currentState === "Login") {
-        const response = await axios.post(
-          backendURL + "/api/user/login",
-          {
-            email,
-            password,
-            captchaToken,
-          },
-          { headers: { token } }
-        );
+        const response = await axios.post(`${backendURL}/api/user/login`, {
+          email,
+          password,
+          captchaToken,
+          headers: { token },
+        });
+
         if (response.data.success) {
           setToken(response.data.token);
           localStorage.setItem("token", response.data.token);
@@ -65,12 +60,10 @@ const Login = () => {
           toast.error(response.data.message);
         }
       } else if (currentState === "Forgot Password") {
-        const response = await axios.post(
-          backendURL + "/api/user/forgot-password",
-          {
-            email,
-            captchaToken,
-          }
+        const response = await axios.get(
+          `${backendURL}/api/user/forgot-password?email=${encodeURIComponent(
+            email
+          )}&captchaToken=${captchaToken}`
         );
         if (response.data.success) {
           toast.info("User was successfully identified.");

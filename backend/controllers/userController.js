@@ -71,7 +71,7 @@ const registerUser = async (req, res) => {
 
     const captchaResult = await captchaResponse.json();
 
-    if (!captchaResult.success || captchaResult.score < 0.5) {
+    if (!captchaResult.success) {
       return res.json({
         success: false,
         message: "CAPTCHA validation failed. Please verify you are human.",
@@ -119,18 +119,9 @@ const registerUser = async (req, res) => {
     res.json({ success: false, message: "Internal server error." });
   }
 };
-
 const updateUser = async (req, res) => {
   try {
     const { email, passwords, newpassword, captchaToken } = req.body;
-
-    const user = await userModel.findOne({ email });
-
-    if (!user) {
-      return res.json({ success: false, message: "User not found" });
-    }
-
-    const isMatch = await bcrypt.compare(passwords, user.password);
 
     const captchaResponse = await fetch(
       "https://www.google.com/recaptcha/api/siteverify",
@@ -151,7 +142,21 @@ const updateUser = async (req, res) => {
         success: false,
         message: "CAPTCHA validation failed. Please verify you are human.",
       });
-    } else if (
+    }
+
+    const user = await userModel.findOne({ email });
+
+    if (!user) {
+      return res.json({ success: false, message: "User not found" });
+    }
+
+    const isMatch = await bcrypt.compare(passwords, user.password);
+
+    if (!isMatch) {
+      return res.json({ success: false, message: "Invalid credentials" });
+    }
+
+    if (
       newpassword.length < 8 ||
       !/[A-Z]/.test(newpassword) ||
       !/[0-9]/.test(newpassword) ||
@@ -162,33 +167,37 @@ const updateUser = async (req, res) => {
         message:
           "Password must be at least 8 characters long and include an uppercase letter, a number, and a special character.",
       });
-    } else if (isMatch) {
-      const salt = await bcrypt.genSalt(10);
-      const hashednewPassword = await bcrypt.hash(newpassword, salt);
-
-      const updatedUser = await userModel.findOneAndUpdate(
-        { email: email },
-        { $set: { password: hashednewPassword } },
-        { new: true }
-      );
-
-      if (!updatedUser) {
-        res.json({ success: false, message: "Error while setting password" });
-      } else {
-        res.json({ success: true, message: "Password updated" });
-      }
-    } else {
-      res.json({ success: false, message: "Invalid credentials" });
     }
+
+    const salt = await bcrypt.genSalt(10);
+    const hashedNewPassword = await bcrypt.hash(newpassword, salt);
+
+    const updatedUser = await userModel.findOneAndUpdate(
+      { email: email },
+      { $set: { password: hashedNewPassword } },
+      { new: true }
+    );
+
+    if (!updatedUser) {
+      return res.json({
+        success: false,
+        message: "Error while setting password",
+      });
+    }
+
+    res.json({ success: true, message: "Password updated successfully" });
   } catch (error) {
     console.log(error);
-    res.json({ success: false, message: error.message });
+    res.json({
+      success: false,
+      message: "An error occurred while updating the user",
+    });
   }
 };
 
 const forgotPassword = async (req, res) => {
   try {
-    const { email, captchaToken } = req.body;
+    const { email, captchaToken } = req.query;
 
     const captchaResponse = await fetch(
       "https://www.google.com/recaptcha/api/siteverify",
@@ -251,7 +260,6 @@ const deleteUser = async (req, res) => {
       return res.json({ success: false, message: "Invalid email provided" });
     }
 
-    const result = await userModel.deleteOne({ email });
     const captchaResponse = await fetch(
       "https://www.google.com/recaptcha/api/siteverify",
       {
@@ -271,14 +279,24 @@ const deleteUser = async (req, res) => {
         success: false,
         message: "CAPTCHA validation failed. Please verify you are human.",
       });
-    } else if (result.deletedCount === 0) {
-      res.json({ success: false, message: "No user found with this email" });
-    } else {
-      res.json({ success: true, message: "User deleted successfully" });
     }
+
+    const result = await userModel.deleteOne({ email });
+
+    if (result.deletedCount === 0) {
+      return res.json({
+        success: false,
+        message: "No user found with this email",
+      });
+    }
+
+    res.json({ success: true, message: "User deleted successfully" });
   } catch (error) {
-    console.log(error);
-    res.json({ success: false, message: error.message });
+    console.error(error);
+    res.json({
+      success: false,
+      message: "An error occurred while deleting the user",
+    });
   }
 };
 

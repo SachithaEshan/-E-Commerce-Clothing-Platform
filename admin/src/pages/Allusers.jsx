@@ -29,9 +29,9 @@ const Allusers = () => {
     };
 
     if (token) {
-      fetchData(); // Call the async function
+      fetchData();
     }
-  }, [token, backendURL]); // Dependency array includes 'email'
+  }, [token, backendURL]);
 
   return (
     <>
@@ -39,7 +39,7 @@ const Allusers = () => {
       <div className="relative overflow-x-auto shadow-md sm:rounded-lg">
         <table className="w-full text-sm text-left rtl:text-right text-gray-500 dark:text-gray-400">
           <thead className="text-xs text-gray-700 uppercase bg-gray-50  dark:text-gray-400">
-            <tr>
+            <tr className="border border-gray-300">
               <th scope="col" className="px-6 py-3">
                 ID
               </th>
@@ -56,7 +56,7 @@ const Allusers = () => {
           </thead>
           <tbody className="bg-white border-b">
             {documents.map((doc) => (
-              <tr key={doc._id}>
+              <tr className="border border-gray-300 border-r-0" key={doc._id}>
                 <td
                   scope="row"
                   className="px-6 py-4 font-medium text-gray-900 whitespace-nowrap"
@@ -70,26 +70,11 @@ const Allusers = () => {
                   {doc.email}
                 </td>
                 <td scope="col" className="px-6 py-3">
-                  {Object.keys(doc.cartData).map((key) => {
-                    const sizes = doc.cartData[key];
-                    return (
-                      <div key={key} className="mb-2">
-                        {key}
-                        {/* {Object.keys(sizes).map((size) => (
-                        <p key={size}>
-                          <span className="font-semibold">{size}</span>:
-                          {sizes[size]["XS"] ||
-                            sizes[size]["S"] ||
-                            sizes[size]["M"] ||
-                            sizes[size]["L"] ||
-                            sizes[size]["XL"] ||
-                            sizes[size]["XLL"]}
-                          piece(s)
-                        </p>
-                      ))} */}
-                      </div>
-                    );
-                  })}
+                  {Object.keys(doc.cartData).map((key) => (
+                    <div key={key} className="mb-2">
+                      {key}
+                    </div>
+                  ))}
                 </td>
               </tr>
             ))}
