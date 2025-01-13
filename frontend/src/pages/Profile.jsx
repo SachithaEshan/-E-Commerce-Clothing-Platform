@@ -27,12 +27,16 @@ const Profile = () => {
         return;
       }
       if (passwords != newpassword) {
-        const response = await axios.post(`${backendURL}/api/user/updateuser`, {
-          email,
-          passwords,
-          newpassword,
-          captchaToken,
-        });
+        const response = await axios.post(
+          `${backendURL}/api/user/updateuser`,
+          {
+            email,
+            passwords,
+            newpassword,
+            captchaToken,
+          },
+          { headers: { token } }
+        );
         console.log(response.data);
         if (response.data.success) {
           toast.success("Password Update successfully");
@@ -69,10 +73,14 @@ const Profile = () => {
     if (isConfirmed) {
       toast.warn("This action cannot be undone");
       try {
-        const response = await axios.post(`${backendURL}/api/user/deleteuser`, {
-          email,
-          DeleteCaptchaToken,
-        });
+        const response = await axios.post(
+          `${backendURL}/api/user/deleteuser`,
+          {
+            email,
+            DeleteCaptchaToken,
+          },
+          { headers: { token } }
+        );
 
         console.log(response.data);
         if (response.data.success) {
@@ -98,10 +106,14 @@ const Profile = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.post(`${backendURL}/api/user/data`, {
-          email,
-          psw,
-        });
+        const response = await axios.post(
+          `${backendURL}/api/user/data`,
+          {
+            email,
+            psw,
+          },
+          { headers: { token } }
+        );
         console.log("Response Data:", response.data);
         setUserName(response.data.userName);
       } catch (error) {

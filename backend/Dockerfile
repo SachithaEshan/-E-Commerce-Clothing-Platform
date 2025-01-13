@@ -1,21 +1,13 @@
-# Select a base image
-FROM  node:20-alpine3.17
+FROM  node:latest AS builder
 
-# Create a directory  and go to the directory 
-WORKDIR /app
-
-# Copy the package.json file to my current directory to install the necessary dependence  
+WORKDIR /backend
+ 
 COPY package.json .
 
-# Install the dependence
-RUN npm install
+RUN npm install -g nodemon
 
-# Copy other files to my current directory
 COPY . .
 
+EXPOSE 4000
 
-# Open the port for the express server
-EXPOSE 5000
-
-# Run express rum in the foreground
-CMD ["npm", "start"]
+CMD ["npm", "run", "server"]

@@ -10,9 +10,13 @@ const Allusers = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.post(`${backendURL}/api/user/allusers`, {
-          token,
-        });
+        const response = await axios.post(
+          `${backendURL}/api/user/allusers`,
+          {
+            token,
+          },
+          { headers: { token } }
+        );
         if (response.data.success) {
           setDocuments(response.data.documents);
           toast.success("Update successfully");
