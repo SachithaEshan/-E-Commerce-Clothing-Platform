@@ -27,7 +27,7 @@ const Profile = () => {
         return;
       }
       if (passwords != newpassword) {
-        const response = await axios.post(
+        const response = await axios.put(
           `${backendURL}/api/user/updateuser`,
           {
             email,
@@ -73,13 +73,12 @@ const Profile = () => {
     if (isConfirmed) {
       toast.warn("This action cannot be undone");
       try {
-        const response = await axios.post(
+        const response = await axios.delete(
           `${backendURL}/api/user/deleteuser`,
           {
-            email,
-            DeleteCaptchaToken,
-          },
-          { headers: { token } }
+            data: { email, DeleteCaptchaToken },
+            headers: { token },
+          }
         );
 
         console.log(response.data);
