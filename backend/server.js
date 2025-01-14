@@ -36,7 +36,7 @@ app.listen(port, () => console.log("Server started on PORT : " + port));
 
 process.on("SIGINT", () => {
   console.log("Gracefully shutting down...");
-  server.close(() => {
+  app.close(() => {
     console.log("Closed out remaining connections.");
     process.exit(0);
   });
