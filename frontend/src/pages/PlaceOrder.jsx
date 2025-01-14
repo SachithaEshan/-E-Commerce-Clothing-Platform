@@ -241,11 +241,11 @@ const PlaceOrder = () => {
           <input
             required
             onChange={onChangeHandler}
-            name="phone"
-            value={formData.phone}
+            name="Phone number"
+            value={formData.city}
             className="border border-gray-300 rounded px-4 py-2 h-10 w-full text-sm"
-            type="number"
-            placeholder="Phone"
+            type="text"
+            placeholder="Phone number"
           />
         </div>
 
