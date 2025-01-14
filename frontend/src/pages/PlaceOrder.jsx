@@ -242,7 +242,6 @@ const PlaceOrder = () => {
             required
             onChange={onChangeHandler}
             name="Phone number"
-            value={formData.city}
             className="border border-gray-300 rounded px-4 py-2 h-10 w-full text-sm"
             type="text"
             placeholder="Phone number"
