@@ -1,1 +1,1 @@
-# -E-Commerce-Clothing-Platform
+# E-Commerce-Clothing-Platform
