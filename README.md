@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 ---
 
 # **Sportswear E-Commerce Application**  
@@ -138,3 +139,6 @@ coursework-group_09/
 This project is licensed under the MIT License. See the [LICENSE](./LICENSE) file for details.  
 
 ---
+=======
+# E-Commerce-Clothing-Platform
+>>>>>>> 697a15aa0fbe6cd6cee5742de20f128cd452bb14
