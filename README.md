@@ -1,5 +1,3 @@
-<<<<<<< HEAD
----
 
 # **Sportswear E-Commerce Application**  
 
